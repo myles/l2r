@@ -1,0 +1,113 @@
+
+
+Version Control
+Mechanism
+- Remote CVS repository
+- authenticated web based front end for check in, check out, and viewing
+of all CVS files.
+
+Policy
+- Open doors policy for all developers of the project.
+- Read access to project lead and technical lead.
+
+Operation
+Daily backup of all changed files
+Weekly backup of all files
+
+
+Build System
+Mechanism
+- custom perl scripts and make files.
+
+Policy
+Operation
+- automatically run once a day. 
+- if successful the new system is placed in a special directory ready 
+for regression test.
+- if failed the build system send email to the project lead.
+
+Regression Test System
+Mechanism
+- custom perl scripts and make files.
+
+Policy
+- not all parts of the system have regression tests. (Ex kernel, gnu tools).
+- all tests a built by the build system daily.
+
+Operation
+- if build is successful, regression tests are run.
+- if regression test succeeds, log success and do nothing.
+- if regression test failed, send email to developer in charge for 
+investigation.
+
+Network Simulation System
+Mechanism
+Policy
+Operation
+
+Documentation System
+A project has the following documentation:
+
+Research Notebook - This is normally notes kept during the research phase of
+the project life. It usually consists of a RFC, a FAQ and a reference 
+implementation, as well as notes kept by the researcher. A research notebook
+is not guarenteed to exist, be complete, or have any useful information.
+
+Marketing Concept - This is a brief summary of the opportunity as it arose
+that the project was initiated for. It summarizes the potential customer,
+the research applicable, and the target market.
+
+Project Charter - This is an official initiator of the project. It outlines 
+the project, and the project leader.
+
+Resource List (People) - names of roles to be filled, and 'job postings' 
+for those roles. This document is kept ongoing, and as the 'job postings' 
+are filled with people, the persons resume is attached to the resource list.
+
+Resource List (Equipment) - this is a list of equipment required for purchase,
+or reallocation.
+
+Task List - this is a initial attempt at enumerating all tasks on the project.
+Time Lines - This is an estimate of timelines of the project assuming
+resource allocation is not an issue.
+Initial Budget - This is a initial budget estimate.
+
+Communiques - these are communication with potential or existing customers.
+
+Architecture Documents
+
+'The Big Picture' - block diagram to whatever detail thought sufficient. This
+is normally a living document 
+
+
+Change Requests - these are requests to change the functionality of the system.
+
+Communication System
+Mechanism
+(local sourceforge set up on sex)
+- web technology
+-	apache dbiauth model for authentication
+-	project homepage
+-	project shared calendar
+-	document repository
+-	access to remote CVS (check in / check out)
+
+- email lists per project
+- announcements email list - all stake holders are on this list. It is
+used as a method of announcing milestones, major project meetings, etc...
+- development email list - all developers, the technical lead, and the
+project lead are on this list.
+
+- postgresql database
+
+Policy
+++++++
+Access
+- Everyone on the team has read/write access to the Communication System
+Back Up 
+- The sourceforge filesystem is mirrored daily and is backed up weekly.
+- there is an on site and a offsite backup kept.
+
+Operation
+
+

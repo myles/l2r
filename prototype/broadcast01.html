@@ -1,0 +1,427 @@
+  
+
+
+<base href="http://aspn.activestate.com/ASPN/Mail/Message/perl-win32-users/552823">
+
+
+
+        
+  
+  
+    
+  
+  
+  
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+<title>ASPN : perl-win32-users :  - Socket Programming</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta name="robots" content="all" />
+    <meta name="description" content="ActiveState Open Source Programming tools for Perl Python XML xslt scripting with free trials. Quality development tools for programmers systems administrators database administrators network administrators and webmasters" />						
+    <meta name="keywords" content="ActiveState,Perl,xml,xslt,mozilla,Open Source,Python,Perl for Win32,resources,PerlScript,ActivePerl,Programming,Programmers,Integrated,Development,Environment,SOAP,Linux,Solaris,Web,development,tools,free,software,download,support,Perl Resource Kit,System Administration,Sys Admin,WinNT,SQL,Oracle,Email,XML,Linux,Programming,perl,NT,2000,windows,Unix,Software,Security,	Administration,systems,windows,database,database,consulting,support,Microsoft,developer,resource,code,tutorials,IDE,Integrated development environment,developer,resources,tcl,php" />
+<link rel="stylesheet" href="/ASPN/aspn_nav4x.css" />
+
+</head>
+
+<body bgcolor="#FFFFFF" marginwidth="10" marginheight="0" topmargin="0" leftmargin="10" rightmargin="10" link="#B82619" vlink="#B82619" alink="#000000">
+
+
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+    <!-- outer table: begin row 1: logo, user options -->
+    <tr>
+        <td colspan="3">
+        
+            <!-- begin top row table: logo, user options -->
+            <table border="0" cellpadding="2" cellspacing="0" width="100%">
+                <tr>
+                    <!-- ASPN logo -->
+                    <td><a href="/ASPN/"><img src="http://www.activestate.com/img/logo_115x35.gif" width="115" height="35" border="0" alt="ASPN" /></a></td>
+                    <!-- space -->
+                    <td><img src="/ASPN/img/x.gif" width="1" height="1" border="0" alt="" /></td>
+                    <!-- user options -->
+                    <td align="right" valign="top">
+
+                        <table cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                                <td class="lineColour" rowspan="2"><img src="/ASPN/img/x.gif" width="1" height="1" border="0" alt="" /></td>  
+                                <td>
+                        
+                                    <!-- begin box user options -->
+                                    <table border="0" cellpadding="0" cellspacing="5">
+                                        <tr>
+                                            <td><img src="/ASPN/img/x.gif" width="5" height="1" border="0" alt="" /></td>
+                                                                                    <td class="userOptions"><a href="/ASPN/doclogin_main" target="_top">sign in</a></td>
+                                            <td class="lineColour"><img src="/ASPN/img/x.gif" width="1" height="15" border="0" alt="" /></td>
+                                            <td class="userOptions"><a href="http://www.activestate.com/cgibin/ASPN/register.plex" target="_top">join</a></td>
+                                                                                    <td><img src="/ASPN/img/x.gif" width="5" height="1" border="0" alt="" /></td>
+                                        </tr>
+                                    </table>
+                                    <!-- end box user options -->
+                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="lineColour"><img src="/ASPN/img/x.gif" width="1" height="1" border="0" alt="" /></td> 
+                            </tr>
+                        </table>  
+                        
+                    </td>
+                </tr>
+            </table>
+            <!-- end top row table -->
+        </td>
+    </tr>
+    <!-- outer table: end of row 1 -->
+<!-- begin primary navigation box -->    
+    <tr><td colspan="3"><img src="/ASPN/img/x.gif" width="1" height="10" border="0" alt="" /></td></tr>
+    
+    <!-- outer table: begin row 2: navigation -->
+    <tr>
+        <td colspan="3">
+            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                  <tr>
+                      <td align="left">
+            
+                        <!-- begin top row table: navigation -->
+                        <table border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td align="right"><img src="/ASPN/img/nav_sel_left.gif" width="6" height="22" border="0" alt="" /></td>
+                                <td class="navSel"><img src="/ASPN/img/x.gif" width="10" height="1" border="0" alt="" /></td>
+                                <td align="center" class="navSel" nowrap="nowrap"><a href="/ASPN/">Home</a></td>
+                                <td class="navSel"><img src="/ASPN/img/x.gif" width="10" height="1" border="0" alt="" /></td>
+                                <td align="left"><img src="/ASPN/img/nav_sel_right.gif" width="6" height="22" border="0" alt="" /></td>
+                            </tr>
+                        </table>
+                        </td>
+                        <td><img src="/ASPN/img/x.gif" width="10" height="1" border="0" alt="" /></td>
+                        <td align="left">
+                        <!-- begin top row table: navigation -->
+                        <table border="0" cellpadding="0" cellspacing="0">
+                            <tr>        
+                                <td align="right"><img src="/ASPN/img/nav_unsel_left.gif" width="6" height="22" border="0" alt="" /></td>
+                                <td class="navunSel"><img src="/ASPN/img/x.gif" width="10" height="1" border="0" alt="" /></td>
+                                <td align="center" class="navunSel" nowrap="nowrap"><a href="/ASPN/Perl/">Perl</a></td>
+                                <td class="navunSel"><img src="/ASPN/img/x.gif" width="10" height="1" border="0" alt="" /></td>
+                                <td align="left"><img src="/ASPN/img/nav_unsel_right.gif" width="6" height="22" border="0" alt="" /></td>
+                                
+                                <td><img src="/ASPN/img/x.gif" width="2" height="1" border="0" alt="" /></td>
+                                
+                                <td align="right"><img src="/ASPN/img/nav_unsel_left.gif" width="6" height="22" border="0" alt="" /></td>
+                                <td class="navunSel"><img src="/ASPN/img/x.gif" width="10" height="1" border="0" alt="" /></td>
+                                <td align="center" class="navunSel" nowrap="nowrap"><a href="/ASPN/Python/">Python</a></td>
+                                <td class="navunSel"><img src="/ASPN/img/x.gif" width="10" height="1" border="0" alt="" /></td>
+                                <td align="left"><img src="/ASPN/img/nav_unsel_right.gif" width="6" height="22" border="0" alt="" /></td>
+                                
+                                <td><img src="/ASPN/img/x.gif" width="2" height="1" border="0" alt="" /></td>
+                                
+                                <td align="right"><img src="/ASPN/img/nav_unsel_left.gif" width="6" height="22" border="0" alt="" /></td>
+                                <td class="navunSel"><img src="/ASPN/img/x.gif" width="10" height="1" border="0" alt="" /></td>
+                                <td align="center" class="navunSel" nowrap="nowrap"><a href="/ASPN/XSLT/">XSLT</a></td>
+                                <td class="navunSel"><img src="/ASPN/img/x.gif" width="10" height="1" border="0" alt="" /></td>
+                                <td align="left"><img src="/ASPN/img/nav_unsel_right.gif" width="6" height="22" border="0" alt="" /></td>
+                                
+                                <td><img src="/ASPN/img/x.gif" width="2" height="1" border="0" alt="" /></td>
+                                
+                                <td align="right"><img src="/ASPN/img/nav_unsel_left.gif" width="6" height="22" border="0" alt="" /></td>
+                                <td class="navunSel"><img src="/ASPN/img/x.gif" width="10" height="1" border="0" alt="" /></td>
+                                <td align="center" class="navunSel" nowrap="nowrap"><a href="/ASPN/Tcl/">Tcl</a></td>
+                                <td class="navunSel"><img src="/ASPN/img/x.gif" width="10" height="1" border="0" alt="" /></td>
+                                <td align="left"><img src="/ASPN/img/nav_unsel_right.gif" width="6" height="22" border="0" alt="" /></td>
+                            </tr>
+                        </table>
+                        </td>
+                        <td align="right">
+                        
+                        <!-- begin top row table: navigation -->
+                        <table border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td align="right"><img src="/ASPN/img/nav_unsel_left.gif" width="6" height="22" border="0" alt="" /></td>
+                                <td class="navunSel"><img src="/ASPN/img/x.gif" width="10" height="1" border="0" alt="" /></td>
+                                <td align="center" class="navunSel" nowrap="nowrap"><a href="/ASPN/Mozilla/">Mozilla</a></td>
+                                <td class="navunSel"><img src="/ASPN/img/x.gif" width="10" height="1" border="0" alt="" /></td>
+                                <td align="left"><img src="/ASPN/img/nav_unsel_right.gif" width="6" height="22" border="0" alt="" /></td>
+                                
+                                <td><img src="/ASPN/img/x.gif" width="2" height="1" border="0" alt="" /></td>
+                                
+                                <td align="right"><img src="/ASPN/img/nav_unsel_left.gif" width="6" height="22" border="0" alt="" /></td>
+                                <td class="navunSel"><img src="/ASPN/img/x.gif" width="10" height="1" border="0" alt="" /></td>
+                                <td align="center" class="navunSel" nowrap="nowrap"><a href="/ASPN/NET/">.NET</a></td>
+                                <td class="navunSel"><img src="/ASPN/img/x.gif" width="10" height="1" border="0" alt="" /></td>
+                                <td align="left"><img src="/ASPN/img/nav_unsel_right.gif" width="6" height="22" border="0" alt="" /></td>
+                                
+                                <td><img src="/ASPN/img/x.gif" width="2" height="1" border="0" alt="" /></td>
+                                
+                                <td align="right"><img src="/ASPN/img/nav_unsel_left.gif" width="6" height="22" border="0" alt="" /></td>
+                                <td class="navunSel"><img src="/ASPN/img/x.gif" width="10" height="1" border="0" alt="" /></td>
+                                <td align="center" class="navunSel" nowrap="nowrap"><a href="/ASPN/WebServices/">Web Services</a></td>
+                                <td class="navunSel"><img src="/ASPN/img/x.gif" width="10" height="1" border="0" alt="" /></td>
+                                <td align="left"><img src="/ASPN/img/nav_unsel_right.gif" width="6" height="22" border="0" alt="" /></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <!-- outer table: end of row 2 -->
+<!-- end of primary navigation box -->
+<!-- begin secondary navigation box -->
+    <tr>
+        <td colspan="3">
+            <table border="0" cellpadding="2" cellspacing="0" align="left" width="100%">
+                <tr> 
+                    <td class="navSecondary"><img src="/ASPN/img/x.gif" width="5" height="1" border="0" alt="" /></td>
+                    <td class="navSecondary">              
+                        <table cellpadding="0" cellspacing="0" border="0">
+                            <tr>
+                                <td class="navSecondary" nowrap="nowrap">
+                                <!-- secondary navigation -->
+                                    <a href="/ASPN/Reference/">Reference</a> | 
+                                    <a href="/ASPN/Downloads/">Downloads</a> | 
+                                    <!--<a href="http://velocity.activestate.com/code">Code</a> | -->
+                                    <a href="/ASPN/Cookbook/">Cookbooks</a> | 
+                                    <a href="/ASPN/Mail/">Mailing Lists</a>
+                                <!-- end of secondary navigation -->
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+
+                    <td class="navSecondary" align="right">
+                    <a href="/ASPN/FAQ">ASPN FAQ</a> | 
+                    <a href="/ASPN/About/">About ASPN</a>
+                    </td>
+                    
+                    <td class="navSecondary"><img src="/ASPN/img/x.gif" width="1" height="25" border="0" alt="" /></td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+
+    
+    <tr><td class="lineColour" colspan="3"><img src="/ASPN/img/x.gif" width="1" height="1" border="0" alt="" /></td></tr>
+<!-- end secondary navigation box -->    
+
+
+<!-- begin main content well -->
+    <tr>
+        <td>
+            <table border="0" cellpadding="10" cellspacing="0" align="left" width="100%">
+                <tr>
+                    <td align="left" valign="top">
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
+<TR>
+  <TD NOWRAP>
+    <SPAN class="heading">perl-win32-users</SPAN><BR>
+     <A HREF="/ASPN/Mail/Browse/Threaded/perl-win32-users/">recent</A> | 
+     <A HREF="/ASPN/Mail/Archives/perl-win32-users/">archives</A> | 
+          <A HREF="/ASPN/Mail/About/perl-win32-users/">about</A> | 
+     <A HREF="/ASPN/Mail/Leaders/perl-win32-users/">leaders</A> | 
+     <A HREF="/ASPN/Mail/my">subscription options</A>
+     <br>
+  </TD>
+  <TD ALIGN="RIGHT"> 
+                                    <!-- begin search box -->       
+                        <table cellpadding="2" cellspacing="0" border="0">
+                        <form action="/ASPN/search"> 
+                            <tr>
+                                <td colspan="5"><img src="/ASPN/img/x.gif" width="1" height="1" border="0" alt="" /></td>
+                            </tr>
+                            <tr>
+                                <!-- search -->
+                                <td nowrap="nowrap" class="downloads">search</td>
+                                <td nowrap="nowrap"><input type="text" size="5"  name="query" /></td>
+                                <td>
+                                                                <select name="type">
+                                  
+                                                                    <option value="Archive_perl-win32-users">in perl-win32-users</option>
+                                                                        <option value="Archive">all lists</option>
+                                     <option value="Archive_Perl">Perl lists</option>
+                                     <option value="Archive_Python">Python lists</option>
+                                     <option value="Archive_PHP">PHP lists</option>
+                                     <option value="Archive_XSLT">XSLT lists</option>
+                                     <option value="ASPN">________</option>
+                                                                     <option value="ASPN">all ASPN</option>
+                                                                                                        <option value="Reference">Reference</option>
+                                    <option value="Products">Products</option>
+                                    <option value="Recipes">Recipes</option>
+                                                                        <option value="Archive">Mailing Lists</option>
+
+                                                                 </select>
+                                </td>
+                                <td><input type="image" src="/ASPN/img/go_02_revised.gif" width="34" height="18" border="0" hspace="0" alt="search" /><!--<input type="button" value="search" />--></td>
+                                <td><img src="/ASPN/img/x.gif" width="5" height="1" border="0" alt=""></td>
+                            </tr>
+                            <tr>
+                                <td align="right" colspan="4" class="downloads"><a href="/ASPN/search/search_help">search help</a></td>
+                                <td><img src="/ASPN/img/x.gif" width="5" height="1" border="0" alt="" /></td>
+                            </tr>
+                        </form>
+                        </table>
+                        <!-- end of search box -->
+       </TD>
+</TR>
+<TR>
+  <TD COLSPAN=2>
+     <hr size="1">
+  </TD>
+</TR>
+</TABLE>
+<SPAN CLASS="subheading">Socket Programming</SPAN> <BR>
+by  (<a href="/ASPN/Mail/Browse/ByAuthor/perl-win32-users?author=John_W_Murphy@Vanguard.com">other posts by this author</a>)<BR>
+Jun  4 2001  8:58PM (<a href="/ASPN/Mail/Browse/Threaded/perl-win32-users/552823">messages near this date</a>) 
+<HR SIZE="1">
+<TABLE BORDER="0" WIDTH="0%"> 
+<TR>
+      <TD>
+      <A TITLE="PREV: RE: grep" HREF="552826"><img border=0 src="/ASPN/img/arrow_left.gif" alt="&lt;&lt;"></A>
+    </TD>
+    <TD NOWRAP ALIGN="LEFT">
+      <A TITLE="PREV: RE: grep" HREF="552826">RE: grep</A>&nbsp;
+    </TD>
+    <TD>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+    </TD>
+        <TD NOWRAP ALIGN="RIGHT">
+      <A TITLE="NEXT: RE: grep" HREF="552821">RE: grep</A>
+    </TD>
+    <TD>
+      <A TITLE="NEXT: RE: grep" HREF="552821"><img border=0 src="/ASPN/img/arrow_right.gif" alt="&gt;&gt;"></A>
+    </TD>
+  </TR>
+</TABLE>
+
+<PRE>
+I have some code that runs fine under Solaris version of Perl 5.005_02.  When I
+move it to NT Perl 5.004_04, it stops working.
+
+I don't get any errors, it just doesn't do what it's supposed to do.
+
+Here's the code.  It a Wake-On-LAN program written by someone else.  Can anyone
+think of why the code wouldn't work the same way on NT?  Are sockets handled the
+same way?
+
+John
+
+#!/opt/Tivoli/custom/bin/perl5/bin/perl
+#
+# little perl script to send a wake-up &quot;magic&quot; packet via lan to power-on
+# a PC. This is only supported by new BIOS versions, and must be supported
+# by the LAN adapter.
+#
+# (c) 1999 by Marc Heuse &lt;<a class='arc' style='text-decoration: underline' href="mailto:mheuse@NO-SPAM.kpmg.com">mheuse@NO-SPAM.kpmg.com</a>&gt;, the GPL applies to this code.
+#
+
+$IP=&quot;255.255.255.255&quot;; # limited broadcast ip (default)
+$PORT=&quot;9991&quot;; # udp port (default)
+$INIT_STREAM=&quot;\377\377\377\377\377\377&quot;; # (don't change this)
+
+require 5.002;
+use Socket;
+
+if (not defined $ARGV[0]) {
+    print &quot;(c) 1999 by Marc Heuse &lt;mheuse\@kpmg.com&gt;\n\n&quot;;
+    print &quot;Syntax: $0 ethernet_id [ip-address] [udp-port]\n\n&quot;;
+    print &quot;Sends a magic wakeup packet to turn on a PC via the LAN\n&quot;;
+    print &quot;Example: $0 00:80:c9:d1:e0:eb 10.70.82.255 53\n\n&quot;;
+    exit(1);
+}
+
+$ETHERNET_ID = $ARGV[0];
+$IP = $ARGV[1] if defined $ARGV[1];
+$PORT = $ARGV[2] if defined $ARGV[2];
+
+print STDOUT &quot;Sending to Ethernet-ID $ETHERNET_ID, using destination
+$IP:$PORT\n&quot;;
+
+$protocol = getprotobyname('udp');
+socket(S, &amp;PF_INET, &amp;SOCK_DGRAM, $protocol) || die &quot;can't create socket\n&quot;;
+setsockopt(S, SOL_SOCKET, SO_REUSEADDR, 1);
+setsockopt(S, SOL_SOCKET, SO_BROADCAST, 1);
+bind(S, sockaddr_in(0, INADDR_ANY)) || die &quot;can't bind\n&quot;;
+$ipaddr = inet_aton($IP) || die &quot;unknown host: $IP\n&quot;;
+$paddr = sockaddr_in($PORT, $ipaddr) || die &quot;sockaddr failed\n&quot;;
+
+$ETHERNET_ID =~ s/[:-]//g;
+$ETHERNET_ID = pack &quot;H12&quot;, $ETHERNET_ID;
+
+$WAKE_UP = $INIT_STREAM; $i=0;
+while ($i&lt;16) {
+    $WAKE_UP = $WAKE_UP . $ETHERNET_ID;
+    $i++;
+}
+
+# send three times to be sure the system gets the packet
+send (S, $WAKE_UP,0,$paddr) || die &quot;send failed.\n&quot;;
+send (S, $WAKE_UP,0,$paddr);
+send (S, $WAKE_UP,0,$paddr);
+
+
+_______________________________________________
+Perl-Win32-Users mailing list
+<a class='arc' style='text-decoration: underline' href="mailto:Perl-Win32-Users@NO-SPAM.listserv.ActiveState.com">Perl-Win32-Users@NO-SPAM.listserv.ActiveState.com</a>
+<a  class='arc' style='text-decoration: underline'  target="_blank" href="http://listserv.ActiveState.com/mailman/listinfo/perl-win32-users">http://listserv.ActiveState.com/mailman/listinfo/perl-win32-users</a>
+</PRE>
+ 
+
+
+<a name="Thread">
+
+
+                    </td>                    
+                </tr>
+            </table>
+        </td>
+    </tr>
+<!-- end main content well -->
+    <tr>
+        <td colspan="3">
+            <!-- begin page footer -->
+            <table border="0" align="center" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                    <td align="center"><img src="/ASPN/img/x.gif" width="1" height="10" border="0" alt="" /></td> 
+                </tr>
+                <tr>
+                    <td class="lineColour" align="center"><img src="/ASPN/img/x.gif" width="1" height="1" border="0" alt=""></td> 
+                </tr>
+                <tr>
+                    <td>
+                        <table border="0" align="center" cellpadding="0" cellspacing="10">
+                            <tr>
+                                <td class="footer" valign="middle" align="center" nowrap="nowrap"><a href="http://www.activestate.com" class="footer">ActiveState Home</a></td>
+                                <td class="lineColour"><img src="/ASPN/img/x.gif" width="1" height="15" border="0" alt="" /></td>
+
+                                <td class="footer" valign="middle" align="center" nowrap="nowrap">
+<a href="http://www.activestate.com/cgibin/ASPN/tellafriend.plex
+?url=http://www.activestate.com/ASPN/Mail/Message/perl-win32-users/552823&title=ASPN
++-+Mailing+List+Archive">Send to a friend</a></td>
+                                <td class="lineColour"><img src="/ASPN/img/x.gif" width="1" height="15" border="0" alt="" /></td>
+
+                                <td class="footer" valign="middle" align="center" nowrap="nowrap"><a href="/ASPN/Contact/" class="footer">Contact Us</a></td>
+                                <td class="lineColour"><img src="/ASPN/img/x.gif" width="1" height="15" border="0" alt="" /></td>
+                                <td class="footer" valign="middle" align="center" nowrap="nowrap"><a href="mailto:ASPN-feedback@activestate.com" class="footer">Comments</a></td>
+                                <td class="lineColour"><img src="/ASPN/img/x.gif" width="1" height="15" border="0" alt="" /></td>
+                                <td class="footer" valign="middle" align="center" nowrap="nowrap"><a href="/ASPN/Legal/" class="footer">Legal</a></td>
+                                <td class="lineColour"><img src="/ASPN/img/x.gif" width="1" height="15" border="0" alt="" /></td>
+                                <td class="footer" valign="middle" align="center" nowrap="nowrap"><a href="/ASPN/Legal/Privacy" class="footer">Privacy</a></td>
+                            </tr>
+                            <tr>
+                                <td class="footer" align="center" colspan="9">
+                                <a href="/ASPN/Legal/Copyright" class="footer">Copyright &copy; 2001</a>, <a href="http://www.activestate.com">ActiveState SRL</a>. All rights reserved.
+                                </td> 
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <!-- end page footer -->
+        </td>
+    </tr>
+      
+</table>
+
+
+<!-- served by Bodum.ActiveState.com:80 -->
+</body>
+</html>
+<!--dtml-call debug_log-->

@@ -1,0 +1,55 @@
+
+Software Procedure
+
+
+1) Conceptual Phase
+
+- research is done at this stage. There is no formal procedure of any
+work completed in this stage.
+- all work done at this stage is stored electronically in a CVS repository
+for evaluation by the next phase.
+- internal RFC's are passed around and filled out for new products and
+processes.
+
+2) Evaluation Phase
+
+- all work in the research phase is evaluated periodically (at least once
+a month) by a group of people including marketing and sales.
+- the group evaluates the research based on exsiting sales opportunities and
+future consideration.
+- a project is initiated based on existing research, a project manager is
+assigned and a team is built.
+
+
+3) Product Development Phase
+
+- architecture. The architecture of the product is defined and possibly
+integrated with the existing system. The architect signs off on all
+architecture documents and sends them to the specification team.
+
+- detailed specification of the product is produced. The specification team 
+signs off on the specification and is sent to the development testing, and
+QA team.
+
+- development of the test plan is defined and is sent to the development
+team for sign off.
+
+- development team writes code and documentation for the product.
+
+- build team creates the automatic build system for the product, integration
+for the product with the rest of the system.
+
+- unit test team builds automatic testing system, with test case development.
+- unit testing occurs as quickly as a complete build succeeds.
+
+- product builds are completed on scheduled intervals signed off by all
+developers and test team and delivered to the Q/A department.
+
+4) QA Phase
+
+- QA test plans are written and signed off.
+
+- On each product build, the signed off build is tested. If the product
+passes it is placed into the repository.
+
+

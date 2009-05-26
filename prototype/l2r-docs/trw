@@ -1,0 +1,35 @@
+
+Project Diary
+
+July 30, 2001
+
+Todo
+- Download all necessary components for router as source code and build from
+scratch.
+- semi-manual build system for base product (to be completely automatic eventually).
+-
+
+- Set up xntp for dev network
+
+
+
+Setup of Software
+
+Server: sex
+	- Set up CVS on Server
+	DNS server
+	NIS Server
+		all normal users exist only via NIS
+	PAM
+	NFS server
+	mount /home directory for all users
+	
+
+Workstation: drugs
+
+Workstation: kink
+
+
+Test Machines: Not done yet.
+
+

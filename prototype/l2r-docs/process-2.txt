@@ -1,0 +1,242 @@
+
+
+Personal Software Process (PSP)
+
+
+
+------------------------------------------------
+
+
+Work Flow
+---------
+
+Phase: Conceptual
+Input:
+Accountable: 'The Lab'
+Deliverable: 
+	RFP
+	RFC
+	FAQ
+	Reference Implementations
+	Lab notebook
+Requires: no requirements
+
+Phase: Project Management
+Input: deliverable from Conceptual Phase
+Accountable: Project Manager
+Deliverable: 
+	Project Charter
+	Project Scope
+	Project Plan
+	Resource Requirements
+	Risk Analysis
+Requires: 
+	sign off from project manager *
+	sign off from all stackholders
+
+
+Phase: Architecture
+Input: 
+	deliverable from Conceptual Phase
+	all proper sign offs
+Accountable: Technical Lead
+Deliverable:
+	Hardware decision
+	third party software decisions
+	High level architecture
+	data diagrams
+		database table schemas
+		persistent data formats
+	flow diagrams
+Requires: Technical lead sign off
+
+Phase: Development
+Input:  
+	architecture deliverables
+	sign off from Techical lead
+Accountable: Project Lead
+Responsible: Technical Lead
+Deliverable: Development Release
+Requires: signoff of Project Lead, and Technical Lead
+
+Phase: Quality Assurance
+Input: 
+	Development Release
+	sign off from the Project Lead
+Accountable: Quality Assurance Manager
+Deliverable: QA Release
+Requires: QA Manager sign off
+
+Phase: Integration
+Input: 
+Accountable: 
+Deliverable: 
+Requires: 
+
+Phase: Deployment
+Input: 
+Accountable: 
+Deliverable: 
+Requires: 
+
+
+* these can be real sign off pages on file or by digital signiture.
+
+--------------------------------------------
+
+Software Development Infrastructure
+
+The software development infrastructure is a local SourceForge system:
+
+
+Code Repository - NFS mounted CVS Repository. The application is built as modules which include all source for the module, all source to test the module, any database schemas the module uses, and any test data required.
+
+Build System - custom build system written in perl and Makefiles with a cron job building everything daily.
+
+Regression Test System - build system builds all tests runs all tests, and if a failure occurs emails the developer in charge of the module being tested. Each module is tested in two ways. at the module level a *.o file is created to be tested by individual tests (link against the *.o into an applet and run the applet), and at the application level where the full application is being built and tests are run against the whole application. 
+
+Release Management System - There are several types of releases.
+Development Release - This is a release that has built and successfully run all regression tests. The Project Lead promotes the build to QA at his discretion.
+QA Release - This is a release that has successfully run through all the QA tests. The QA manager promotes this at his descretion for integration (if part of a bigger system) or deployment.
+
+Defect Tracking - To make a change in any of the modules a defect must be opened. A defect can be opened by QA or by a developer. The build system can check for existing defects against a failed module and open a defect against that module.
+
+Digital Signiture - all people have a digital signiture. This is used as a method of authentication and autorization in the software process. For example a developer needs to 'sign off' when a defect is closed, or the Technical leads 'signs off' on a development release by producing a signuture file with the date, build number, and his digital signiture. Digital signitures in the software process is used to maintain accountablity to the code being worked on, and the management of the process.
+The implementation of the signiture is a public-private key pair. The public keys are listed and kept in the main keyring.
+
+
+--------------------------------------------------
+
+Document Management System
+
+SDF
+All documents are written using Simple Document Format (SDF) mark up language and are in revision control.
+
+SDF is an open source document development system capable of generating outputs in a variety of formats including, HTML and Latex.
+
+SDF has the following advantages:
+	support for multiple formats;
+	support for large on-line documentation systems;
+	central management of formatting standards.
+
+A copy of the manual is available upon request.
+
+Imagick
+Imagick is a toolset for handling converting between multiple formats of images, including jpeg, gif, eps(postscript).
+
+Tools:
+text editor - there is no required text editor
+vector graphics - xfig or dia, as long as it produces eps (postscript)
+spreadsheet - gnumeric
+
+
+--------------------------------------------------
+
+Project Management System
+
+Phprojekt is a web based groupware/project management system that is used to manage all projects.
+
+It has the following features:
+	personal and group calendars
+	
+
+   
+--------------------------------------------------
+
+
+Tools
++++++ 
+	The Lab
+	+++++++
+	Server
+		four network interfaces:
+			tst.mb.com - test lab
+			dev.mb.com - development lab
+			cfg.mb.com - cyber fuck gateway
+			air.mb.com - wireless lan
+		forwarding between interfaces turned on.	
+		 
+		custom install of RH 7.1
+		
+		NFS server
+			export /home (rw, no_root_squash) to all networks
+			
+		NIS server
+
+		CVS Repository
+			access via local sourceforge.
+			user authenticated read/write access
+			anonymous read only access
+
+
+	Workstation (dev.mb.com)
+		mostly complete install of RH 7.1, with development and kernel devlopment
+		/home mounted from NFS
+		all users are NIS authenticated
+		setup of ssh auth from workstation to servers
+		
+
+	Test Networks (tst.mb.com)
+		These are four machines rack mounted with a custom install of RH 7.1
+		Each has two network connections. (tst, and other) That can be reconfigured.
+
+
+	Air Network (air.mb.com)
+		These are three laptops with wireless connectivity. 
+
+
+======================================================================================================
+
+The Team
+
+Project Manager (TBA)
+
+Project Leader (Bill Thanis)
+
+Technical Leader (Drew Sullivan)
+
+Quality Assurance Manager (TBA)
+
+Developer (TBA) 
+- kernel hacker
+- user level tools
+- kernel module hacker
+- web/gui
+- technical writer
+
+Quality Assurnace Tester (TBA)
+- simulations (3)
+
+Project Assistance (TBA)
+
+Hardware/Sys/Network Admin (TBA)
+
+Operational People (TBA)
+
+Cost Breakdown
+==============
+Title			Rate		Q	
+Project Manager		$200/hr		1	$ 200
+Project Leader		$200/hr		1	$ 200
+Technical Leader	$200/hr		1	$ 200
+QA Manager		$200/hr		1	$ 200
+HNS Admin		$200/hr		1	$ 200
+
+Developer		$150/hr		8	$1200
+Project Admin		$100/hr		1	$ 100
+Other			$200/hr		1	$ 200
+++++++++++++++++++++++++++++++++++++++++++
+
+Total							$2500/hr
+
+
+Time Estimate
+22 day/40 hr * $2500 = $2 200 000
+6 month Ellapsed = 6* 2.2M = 13.2 M.
+
+
+Hardware Cost
+=============
+
+
+

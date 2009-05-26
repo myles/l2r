@@ -1,0 +1,12 @@
+#===========================================================================
+# local bound traffic delivered via eth0
+#
+IN=eth1         # inside interface
+OUT=eth0        # outside (internet) interface
+
+#===========================================================================
+# delete the old queues
+#
+tc qdisc del root dev $IN
+tc qdisc del root dev $OUT
+

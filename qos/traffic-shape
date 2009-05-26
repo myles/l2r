@@ -1,0 +1,79 @@
+#===========================================================================
+# local bound traffic delivered via eth0
+#
+IN=eth1         # inside interface
+OUT=eth0        # outside (internet) interface
+
+#===========================================================================
+# delete the old queues
+#
+tc qdisc del root dev $IN
+tc qdisc del root dev $OUT
+
+
+#===========================================================================
+# add root device
+#
+tc qdisc add dev $IN  root handle 10: cbq bandwidth 100Mbit avpkt 1000
+tc qdisc add dev $OUT root handle 20: cbq bandwidth 100Mbit avpkt 1000
+
+class() {
+	: "********** $@ **********"
+        PARENT=$1
+        CHILD=$2
+        RATE=$3
+	BOUND=$4
+
+        tc class add dev   $IN \
+                parent  10:$PARENT \
+                classid 10:$CHILD \
+                cbq bandwidth 100Mbit rate   $RATE \
+                allot 1514 prio 5 maxburst 20 avpkt 1000  $BOUND
+
+        tc class add dev   $OUT \
+                parent  20:$PARENT \
+                classid 20:$CHILD \
+                cbq bandwidth 100Mbit rate   $RATE \
+                allot 1514 prio 5 maxburst 20 avpkt 1000  $BOUND
+
+        tc qdisc add dev $IN  parent 10:$CHILD sfq quantum 1514b perturb 15
+        tc qdisc add dev $OUT parent 20:$CHILD sfq quantum 1514b perturb 15
+
+}
+
+filter() {
+        CLASS=$1
+        IP=$2
+        tc filter add dev $IN  parent 10:0 protocol ip prio 25 u32 \
+                match ip dst $IP flowid 10:$CLASS
+
+        tc filter add dev $OUT parent 20:0 protocol ip prio 25 u32 \
+                match ip src $IP flowid 20:$CLASS
+}
+
+class    0   1  10Mbit
+
+class    1 100 1200Kbit 'bounded isolated'
+class  100 200  100Kbit 'bounded isolated'
+class  100 201  100Kbit 'bounded isolated'
+class  100 202  100Kbit 'bounded isolated'
+class  100 203  100Kbit 'bounded isolated'
+class  100 204  100Kbit 'bounded isolated'
+
+filter     200 192.168.6.230
+
+filter     201 192.168.6.231
+filter     203 192.168.6.233
+filter     204 192.168.6.234
+
+filter     201 192.168.5.231
+filter     203 192.168.5.233
+filter     204 192.168.5.234
+
+#filter     100 207.176.205.0/24
+#filter     100 207.176.206.0/24
+
+filter     100 0/0
+
+exit 0
+

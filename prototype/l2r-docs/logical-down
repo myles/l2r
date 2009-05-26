@@ -1,0 +1,6 @@
+#!/bin/bash
+
+for i in `seq 100 200`;
+do
+	ifconfig eth0:$i down
+done

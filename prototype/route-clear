@@ -1,0 +1,13 @@
+#!/usr/bin/perl
+
+open(ROUTE, "/sbin/route -n |") or die;
+open(SH, "| sh -x") or die;
+while (<ROUTE>) {
+	next unless /UGH/;
+
+	chomp;
+	s/ .*//;
+	
+	print SH "route delete $_\n";
+}
+close(ROUTE);

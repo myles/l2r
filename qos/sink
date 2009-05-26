@@ -1,0 +1,48 @@
+#!/usr/bin/perl -w
+
+use strict;
+use IO::Socket;
+
+my($hostname) = `hostname`; chomp $hostname;
+
+my($main_sock, $sock, $pid);
+
+$main_sock = new IO::Socket::INET(
+		LocalHost => $hostname,
+		LocalPort => 1200,
+		Proto => 'tcp',
+		Listen => 5,
+		Reuse => 1,
+	);
+
+die "Could not connect: $!" unless $main_sock;
+
+while ($sock=$main_sock->accept()) {
+	$pid = fork();
+	die "Can't fork: $!" unless defined $pid;
+
+	if ($pid == 0) {
+		handle_input($sock);
+	}
+}
+
+sub handle_input {
+	my($sock) = @_;
+	my($cnt) = 0;
+	my($buf) = '';
+	my($bytes_read);
+
+	my($start) = time();
+	print "Start connection.\n";
+	for (;;) {
+		$bytes_read = sysread($sock, $buf, 1024);
+		last unless $bytes_read;
+
+		++$cnt;
+	}
+	my($end) = time();
+
+	print "End connect dur=", $end - $start, " io=$cnt kb\n";
+	exit 0;
+}
+

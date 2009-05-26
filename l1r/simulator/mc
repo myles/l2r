@@ -1,0 +1,90 @@
+#!/usr/bin/perl
+
+=head1 NAME
+
+mc - Master Control - used to control l2r simulator
+
+=head1 SYNOPIS
+
+mc [options...] [files]...
+
+=head1 DESCRIPTION
+
+
+=head1 OPTIONS
+
+=item -x Turn debugging on
+
+=item -b : Use : as the base directory.
+
+=item -n : Simulate : nodes.
+
+=head1 AUTHOR
+
+Drew Sullivan <drew@ss.org>
+
+=head1 COPYRIGHT
+
+(C) Drew Sullivan 2000
+
+=cut
+
+sub usage {
+	die <<"EOF";
+Usage: $0 [options...] [files]...
+   -- used to display files in $L2Rdir
+Options:
+   -x     -- turn Debugging on.
+   -b :   -- change base directory.
+   -n :   -- simulagte : nodes
+EOF
+}
+
+use Getopt::Std;
+use L2R;
+
+&getopts('xb:n:', \%opt) || usage;
+
+$| = 1;
+
+my $Debug  = $opt{x} || 0;
+my $L2Rdir = $opt{b} || "/home/l2r";
+my $Nodes  = $opt{n} || 10;
+
+unless (-d $L2Rdir) {
+	die "No L2R directory: $L2Rdir\n";
+}
+
+my(@Nodes);
+my(@Broadcast);
+
+&generate_nodes();
+&simulate();
+
+sub generate_nodes {
+	my($node, $path);
+
+	foreach $node (1 .. $Nodes) {
+		$path = "$L2Rdir/S.$node";
+
+		$Nodes[$node-1] = new L2R(
+			-name => "n$node",
+			-path => $path,
+		);
+	}
+}
+
+sub simulate {
+	my(@work);
+
+	for (;;) {
+		@Broadcasts = ();
+		@work = @Nodes;
+
+		while (@work) {
+			$node = shift @work;
+
+			next if poison($node);
+		}	
+	}
+}

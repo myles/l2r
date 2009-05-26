@@ -1,0 +1,131 @@
+Message,sent by,recieved by,Actions
+
+A me-venkman you-clortho
+	egon,venkmann ->  clortho
+		add venkmann to list
+
+C me-clortho you-venkmann
+	clortho -> egon
+		promote to venkmann
+		send A message
+
+E me-clortho timeout
+	clortho -> venkmann
+		change to egon
+		set timeout before broadcasting S-message wait for a C-message
+
+G me-clortho uptime venkmann-number
+	clortho -> clortho
+		check if merge is desirable (see rules), if so send M-message.
+
+L me-clortho venkmann-list
+	clortho -> venkmann
+		add venkmann list to routing table
+
+L me-clortho venkmann-list
+	clortho -> zuul
+		add venkmann list to routing table
+		and send L-message to foreign clortho/zuul.
+
+L me-clortho venkmann-list
+	zuul -> foreign zuul
+		add venkmann list to routing table
+		and send L-message to clortho.
+
+L me-clortho venkmann-list
+	weak zuul -> clortho
+		add venkmann list to routing table.
+
+M me-clortho you-clortho
+	clortho -> clortho
+		send N-message
+
+N me-clortho you-clortho
+	clortho -> clortho
+		send S-message
+		send E-message
+		demote yourself to egon
+
+O me-venkmann you-clortho
+	venkmann -> clortho
+		cancel remove timeout for venkmann
+
+O me-venkmann you-clortho
+	venkmann -> foreign venkmann
+		promote to zuul
+		and send a W-message to foreign venkmann
+		and a Y message to your clortho
+
+P me-clortho you-venkmann (optional list of venkmann)
+	clortho -> venkmann
+		reset timeout for ping message. 
+		if message for you return O message else do nothing.
+
+P me-clortho you-venkmann (optional list of venkmann)
+	clortho -> egon
+		promote yourself to venkmann and send A message
+
+P me-clortho you-venkmann (optional list of venkmann)
+	clortho -> clortho
+		send G-message
+
+P me-clortho you-venkmann (optional list of venkmann)
+	clortho -> zuul
+		send Z-message
+
+P me-clortho you-venkmann (optional list of venkmann)
+	clortho -> foreign venkmann
+		promote to zuul and send Z-message
+
+R me-zuul you-clortho
+	venkmann -> egon
+		promote yourself to a clortho
+		add venkmann to zuul list as foreign zuul.
+
+S me-name
+	egon -> clortho
+		send C message
+
+S me-name
+	egon -> egon
+		promote yourself to clortho set timeout for A message
+		and send a C message
+
+T me-clortho you-clortho1 you-clortho2 timeout ( to be looked at later)
+	clortho -> venkmann
+		if you are one of the two venkmann in the list promote
+		yourself to clortho else become an egon and send
+		S-messages after timeout.
+
+W me-zuul you-zuul he-foreign-clortho
+	venkmann -> venkmann
+		promote yourself to zuul
+		send Y-message to your clortho.
+
+Y me-zuul you-clortho he-zuul
+	weak zuul -> clortho
+		Add zuul to zuul list and send a L-message
+
+Z me-zuul you-clortho he-foreign-clortho
+	venkmann -> clortho
+		Add zuul to zuul list and send a L-message
+
+Merge Rules,MESSAGE,SENDS,
+if VN > fVN do nothing,A,-,
+if VN+fVN >100 do nothing,C,A,
+if VN+fVN <100 send M-message,E,S,
+,G,M,
+,L,L,
+,M,N,
+,N,-,
+,O,Y,
+,P,O,A,G,Z,
+,R,-,
+,S*,C,
+,T*,-,
+,W,Y,
+,Y,L,
+,Z,L,
+,,,
+,,,
+,* Messages depends on outside factors and not on incoming messge,,

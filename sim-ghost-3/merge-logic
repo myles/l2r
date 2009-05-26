@@ -1,0 +1,19 @@
+
+If a clortho hears a foreign clortho ping it responds with a clortho
+greeting.
+
+If a clortho gets a clortho greeting it starts a timeout for that
+clortho. (20 s)
+
+The clortho checks if its venkmann number is bigger than the one in
+the greeting.  If yes send greeting and do nothing.
+
+If no check if the sum is bigger than the maximum size send a merge
+request M-Message.  If yes do nothing.
+
+If a clortho gets a merge request (M) it returns an accept N.
+
+If a clortho gets a N message it sends a egonize (E) timeout 5 seconds
+demotes himself to egon sending venkmann_request immediately.
+
+

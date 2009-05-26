@@ -1,0 +1,13 @@
+#!/bin/sh
+
+LIST='orange apple peach pear'
+LIST='aorange aapple apeach apear'
+
+if [ $# -ge 1 ] ; then
+	LIST="$@"
+fi
+
+for i in $LIST ; do
+	echo $i
+	tar clf - . | ssh root@$i 'cd /home/l2r && tar -xf -'
+done

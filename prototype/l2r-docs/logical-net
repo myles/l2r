@@ -1,0 +1,6 @@
+#!/bin/bash
+
+for i in `seq 100 200`;
+do
+	ifconfig eth0:$i 192.168.$i.5 netmask 255.255.255.0
+done

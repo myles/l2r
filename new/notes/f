@@ -1,0 +1,12 @@
+{clortho_greeting}
+{clortho_ping}
+{clortho_promotion}
+{clortho_reply}
+{merge_request}
+{venkmann_acknowledge}
+{venkmann_list}
+{venkmann_pong}
+{venkmann_reply}
+{venkmann_request}
+{weak_zuul_announcement}
+{zuul_announcement}

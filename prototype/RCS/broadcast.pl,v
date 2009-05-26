@@ -1,0 +1,60 @@
+head	1.2;
+access;
+symbols;
+locks
+	drew:1.2; strict;
+comment	@# @;
+
+
+1.2
+date	2001.08.09.19.32.11;	author drew;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2001.08.08.20.24.25;	author drew;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@*** empty log message ***
+@
+text
+@
+sub broadcast {
+	my($dev, $ip, $port);
+
+	my(%interface) = discover();
+
+	socket(Sock, PF_INET, SOCK_DGRAM,getprotobyname("udp"));
+	setsockopt(Sock, SOL_SOCKET, SO_BROADCAST, 1);
+
+	foreach $dev (sort keys %interface) {
+		$ip = inet_aton($interface{$dev});
+
+		$port = sockaddr_in(2, $ip);
+
+		send(Sock, "@@_", 0, $port);
+#		print "sent $dev->$interface{$dev}: @@_\n";
+	}
+}
+
+1;
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d16 1
+a16 1
+#		print "sent $dev->$interface{$dev}: @@ARGV\n";
+@

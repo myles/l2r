@@ -1,0 +1,66 @@
+
+
+Moby Dark Project Management
+
+Date: 20010813
+Revision: 0.1
+
+Introduction
+
+The project management methodology are part of the existing software infrastructure and depend on the methodologies developed informally over the last several years of development effort. This document does not intend to build a project management system nor to impose an outside system on an existing system.
+
+This document is intended to codify an existing process that is already adoptable for various projects.
+
+
+Project Mangement Fundementals
+
+The project methodology follows the phase based methodology described by the Project Management Book of Knowledge, or the Milspec 826A. The phase used are the following - conceptual, initiation, development, integration, deployment, and maintenance. Not all phases may be applicable to all projects and the choice is left to the descretion of the project manager.
+
+Conceptual Phase
+The conceptual phase rarely is part of any project. It is based on lab developments and development of by individuals employed by the company. The conceptual phase are ideas bounced around amongst the people in the company and result in RFC/RFP/HOWTO's/and demo implementations stored locally in a repository.
+
+The conceptual phase repository is a store of intellectual property that is drawn upon to solve problems as they arise on existing projects, or as sources of possible product development.
+
+Initiation Phase
+The initiation phase has two very different methodologies depending on if the project is an internal (product development) phase or external. If it is an product development the following deliverables are a product brochure signed off by marketing, a detailed architecture signed off by the technical lead, a task list, time line, resource requirements and cost forecast signed off by the project manager.
+
+Development Phase
+
+
+Integration Phase
+
+
+Deployment Phase
+
+
+Maintenance Phase
+
+
+Sign Off Requirements
+The methodolgy used is based on a process of sign off. Sign off can be normal paper based sign off or it can be a sign off based on digitally authenticated certificates. Every phase of a project have the following roles: 
+
+Accountable -  This is a real person who must sign off on the entire phase as complete.
+
+Responsible - This is one or more people that is responsible for a deliverable in the development effort during the phase and is required to sign off that the deliverable is complete. A sign off of the deliverable by the
+
+
+
+
+Management Tools
+
+Development is done on unix systems (linux, freebsd, solaris, HP). The development tools used are all under the GPL or similar licence and include the compilers suite from the Free Software Foundation, perl and its modules.
+
+The project management tools used by the project management team are all web based gleened from source forge or developed in house. They include a web based groupware system, a web based development repository with minimal authentication requirements (username/passwd). All tools are licensed under the GPL or similar license.
+
+
+
+Glossary Of Terms
+
+task - a fixed quantity of work to be completed. All task end with a deliverable.
+
+delverible - the results of work that is to be completed and signed off. It can be a report, a code segment, a document, etc... .
+
+accountable - the person who is to be blamed if something goes wrong.
+
+responsible - the person whose job it is to complete the task and sign off on the deliverable of the task.
+

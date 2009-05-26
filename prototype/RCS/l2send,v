@@ -1,0 +1,63 @@
+head	1.2;
+access;
+symbols;
+locks
+	drew:1.2; strict;
+comment	@# @;
+
+
+1.2
+date	2001.08.08.20.24.25;	author drew;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2001.08.02.20.20.08;	author drew;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@*** empty log message ***
+@
+text
+@#!/usr/bin/perl
+
+use Socket;
+
+require "discover.pl";
+
+%Interface = discover();
+
+$date = `date +%Y-%m-%d.%T`;
+
+socket(Sock, PF_INET, SOCK_DGRAM,getprotobyname("udp"));
+setsockopt(Sock, SOL_SOCKET, SO_BROADCAST, 1);
+
+foreach $dev (sort keys %Interface) {
+	$ip = inet_aton($Interface{$dev});
+
+	$port = sockaddr_in(2, $ip);
+
+	send(Sock, "@@ARGV\ndate $date", 0, $port);
+	print "sent $dev->$Interface{$dev}: @@ARGV\n";
+}
+
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d9 2
+d19 1
+a19 1
+	send(Sock, "@@ARGV", 0, $port);
+@

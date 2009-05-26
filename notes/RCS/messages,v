@@ -1,0 +1,159 @@
+head	1.1;
+access;
+symbols;
+locks
+	drew:1.1; strict;
+comment	@# @;
+
+
+1.1
+date	2001.09.05.21.43.12;	author drew;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@*** egon (F) Freeman
+
+[_] 1) all nodes start life as an egon
+
+[_] 2) all egon want to join a network. They do this by sending out
+a {venkmann_request}
+
+# V me-name				-- venkmann request
+
+[_] 3) if a egon hears a {venkmann_request} he promotes himself to a
+clortho and broadcasts a {clortho_reply}.
+
+# S me-clortho you-venkmann		-- clortho reply
+
+[_] 4) if an egon gets a {clortho_reply} it promotes himself to a venkmann
+and sends a {venkmann_acknowledge}. A {clortho_reply} is not specific to
+any egon. The {venkmann_request} that started the {clortho_reply} need not
+be the egon that gets accepted.
+
+# M me-venkman you-clortho		-- venkmann_acknowledge
+
+[_] 5) if a egon promoted to a clortho doesn't get a venkmann reply it
+demotes himself to a egon again and tries to join a network.
+
+*** clortho
+
+[_] 1) If a clortho gets a {venkmann_request} he sends a {clortho_reply}
+always.
+
+[_] 2) If a clortho hears a {venkmann_acknowledge} it adds the venkmann to
+the list and increments a venkmann number.
+
+[_] 3) A clortho broadcasts a {clortho_ping}. A clortho ping contains the
+clortho id, and a venkmann id. That venkmann send a {venkmann_pong}.
+
+# P me-clortho you-venkmann {list of new venkmann}		-- clortho_ping
+# O me-venkmann you-clortho		-- venkmann_pong
+
+[_] 4) If a venkmann is added to the venkmann list the {clortho_ping} contains
+a list of venkmann added.
+
+[_] 5) A clortho hearing another {clortho_ping} will initiate a
+{clortho_greeting} (see merging)
+
+# C ...
+
+# Z me-zuul you-clortho he-clortho	--zuul announcement
+# foreign clortho second.
+
+[_] 6) If the clortho calculates to do a split of a cluster a cluster is
+split.( See splitting rules)
+
+[_] 7) If a clortho gets a {zuul_announcement}, it adds the node name to the
+zuul list with the clortho it speaks to and increments the zuul number.
+
+# Z me-zull
+
+[_] 8) If a clortho gets a {zuul_announcement} from a venkmann of another
+cluster, it adds the node to the zuul list with the clotho it speaks to,
+increments the zuul number and tags him as a foreign zuul, and sends
+the complete {venkmann_list} to him.
+
+*** venkmann
+
+[_] 1) A venkmann is a venkmann as long as he can hear his clortho
+(clortho_ping). The {clortho_ping} is not rebroadcast except in cases of
+a weak zuul.
+
+[_] 2) If the {clortho_ping} is for a particular venkmann ( contains venkmann
+id), he responds to it.
+
+[_] 3) If a venkmann hears a {clortho_ping} from a foriegn clortho sends a
+{zuul_announcement} to his clortho and the clortho he heard.
+
+# B me-venkman to-myclortho fro-clortho
+
+[_] 4) If a venkmann hears two {venkmann_request}s without a {clortho_reply}
+he sends a {clortho_promotion} to the egon and a {zuul_announcement} to
+his clortho.
+
+[_] 5) If a venkmann hears a {venkmann_reply} from another cluster it sends
+a {weak_zuul_announcement} to its clortho and to the venkmann.
+
+[_] 6) If a venkmann hears a {weak_zuul_announcement} from a venkmann of
+another cluster, it promotes itself to a weak zuul and sends a 
+{weak_zuul_announcement} to its clortho and to the other zuul.
+
+*** zuul
+
+[_] 1) All zuuls are venkmann. The first two venkmann rules apply.
+
+[_] 2) A zuul will act as a gateway between the clusters he is authoritative.
+
+[_] 3) If the zuul is weak, it will rebroadcast the clortho ping to the
+other side.
+
+[_] 4) If a zuul gets a {clortho_ping} with a venkmann list, it adds the list
+to its tables, and rebroadcast it to the other clortho.
+
+*** Merging a cluster
+
+[_] 1) if two clortho get within each others range (each can hear each others
+{clortho_ping}), then a {clortho_greeting} is sent. The greeting gives the
+clortho statistics and number of venkmann each has.
+
+[_] 2) Once a {clortho_greeting} is recieved it is analyzed to see if a merge
+is possible. The clortho with the lower number of venkmann initiates
+the merge. If the number is the same, the one with the shorter uptime
+(as a clortho) initiates the merge. If uptime is a tie, the clortho with
+the small MAC address starts the merge.
+
+[_] 3) A {merge_request} is sent if the number of venkmann in total is less
+than 96 (arbitary number and possibly will change).
+
+[_] 4) A {merge_request} is sent.
+
+[_] 5) When a {merge_request} is acknowledged the clortho originating the
+merge sends an abandonment notice to his cluster and a venkmann request
+to the clortho.
+
+[_] 6) The venkmann of the cluster demote themselves to egon and wait for a
+timeout (to hear a {clortho_reply} before they send out venkmann requests.
+
+Transferring Venkmann
+
+Splitting a cluster
+
+Operators:
+
+find_route - this is a broadcast initiated by a clortho or zuul on behalf
+of a node for finding a route from one node to another.  
+
+verify_route - this is a verification message sent to the node to make
+sure it is still there.
+
+@

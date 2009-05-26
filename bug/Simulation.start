@@ -1,0 +1,550 @@
+clock	434
+dx	-7
+dy	-5
+mac	XX:00:01
+master	
+name	u-1
+status	F
+width	1000
+x	750
+y	64
+
+clock	959
+dx	-8
+dy	0
+mac	XX:00:02
+master	
+name	u-2
+status	F
+width	1000
+x	595
+y	98
+
+clock	905
+dx	2
+dy	-1
+mac	XX:00:03
+master	
+name	u-3
+status	F
+width	1000
+x	702
+y	710
+
+clock	989
+dx	-7
+dy	-2
+mac	XX:00:04
+master	
+name	u-4
+status	F
+width	1000
+x	190
+y	995
+
+clock	913
+dx	-1
+dy	-2
+mac	XX:00:05
+master	
+name	u-5
+status	F
+width	1000
+x	70
+y	620
+
+clock	964
+dx	1
+dy	-10
+mac	XX:00:06
+master	
+name	u-6
+status	F
+width	1000
+x	3
+y	773
+
+clock	218
+dx	-1
+dy	7
+mac	XX:00:07
+master	
+name	u-7
+status	F
+width	1000
+x	1
+y	234
+
+clock	147
+dx	2
+dy	-10
+mac	XX:00:08
+master	
+name	u-8
+status	F
+width	1000
+x	408
+y	709
+
+clock	194
+dx	-2
+dy	-2
+mac	XX:00:09
+master	
+name	u-9
+status	F
+width	1000
+x	336
+y	65
+
+clock	188
+dx	-3
+dy	-5
+mac	XX:00:10
+master	
+name	u-10
+status	F
+width	1000
+x	193
+y	271
+
+clock	761
+dx	-2
+dy	6
+mac	XX:00:11
+master	
+name	u-11
+status	F
+width	1000
+x	469
+y	159
+
+clock	742
+dx	-7
+dy	1
+mac	XX:00:12
+master	
+name	u-12
+status	F
+width	1000
+x	188
+y	906
+
+clock	925
+dx	3
+dy	1
+mac	XX:00:13
+master	
+name	u-13
+status	F
+width	1000
+x	86
+y	411
+
+clock	737
+dx	-4
+dy	3
+mac	XX:00:14
+master	
+name	u-14
+status	F
+width	1000
+x	768
+y	597
+
+clock	389
+dx	-6
+dy	6
+mac	XX:00:15
+master	
+name	u-15
+status	F
+width	1000
+x	722
+y	459
+
+clock	902
+dx	1
+dy	6
+mac	XX:00:16
+master	
+name	u-16
+status	F
+width	1000
+x	658
+y	168
+
+clock	370
+dx	0
+dy	6
+mac	XX:00:17
+master	
+name	u-17
+status	F
+width	1000
+x	868
+y	492
+
+clock	104
+dx	-7
+dy	-5
+mac	XX:00:18
+master	
+name	u-18
+status	F
+width	1000
+x	413
+y	189
+
+clock	414
+dx	-8
+dy	-4
+mac	XX:00:19
+master	
+name	u-19
+status	F
+width	1000
+x	602
+y	547
+
+clock	32
+dx	-1
+dy	1
+mac	XX:00:20
+master	
+name	u-20
+status	F
+width	1000
+x	894
+y	281
+
+clock	759
+dx	-1
+dy	-10
+mac	XX:00:21
+master	
+name	u-21
+status	F
+width	1000
+x	491
+y	180
+
+clock	42
+dx	6
+dy	7
+mac	XX:00:22
+master	
+name	u-22
+status	F
+width	1000
+x	205
+y	943
+
+clock	228
+dx	6
+dy	-8
+mac	XX:00:23
+master	
+name	u-23
+status	F
+width	1000
+x	196
+y	169
+
+clock	460
+dx	-6
+dy	-5
+mac	XX:00:24
+master	
+name	u-24
+status	F
+width	1000
+x	225
+y	708
+
+clock	147
+dx	4
+dy	0
+mac	XX:00:25
+master	
+name	u-25
+status	F
+width	1000
+x	981
+y	404
+
+clock	645
+dx	-10
+dy	-9
+mac	XX:00:26
+master	
+name	u-26
+status	F
+width	1000
+x	624
+y	671
+
+clock	473
+dx	3
+dy	-4
+mac	XX:00:27
+master	
+name	u-27
+status	F
+width	1000
+x	163
+y	198
+
+clock	684
+dx	-2
+dy	5
+mac	XX:00:28
+master	
+name	u-28
+status	F
+width	1000
+x	797
+y	605
+
+clock	615
+dx	-7
+dy	-7
+mac	XX:00:29
+master	
+name	u-29
+status	F
+width	1000
+x	858
+y	161
+
+clock	357
+dx	8
+dy	8
+mac	XX:00:30
+master	
+name	u-30
+status	F
+width	1000
+x	8
+y	518
+
+clock	504
+dx	8
+dy	8
+mac	XX:00:31
+master	
+name	u-31
+status	F
+width	1000
+x	132
+y	477
+
+clock	601
+dx	7
+dy	-5
+mac	XX:00:32
+master	
+name	u-32
+status	F
+width	1000
+x	744
+y	238
+
+clock	354
+dx	9
+dy	1
+mac	XX:00:33
+master	
+name	u-33
+status	F
+width	1000
+x	295
+y	319
+
+clock	611
+dx	-1
+dy	7
+mac	XX:00:34
+master	
+name	u-34
+status	F
+width	1000
+x	748
+y	376
+
+clock	574
+dx	1
+dy	-3
+mac	XX:00:35
+master	
+name	u-35
+status	F
+width	1000
+x	349
+y	251
+
+clock	88
+dx	9
+dy	-10
+mac	XX:00:36
+master	
+name	u-36
+status	F
+width	1000
+x	700
+y	830
+
+clock	308
+dx	0
+dy	-5
+mac	XX:00:37
+master	
+name	u-37
+status	F
+width	1000
+x	595
+y	600
+
+clock	836
+dx	-1
+dy	5
+mac	XX:00:38
+master	
+name	u-38
+status	F
+width	1000
+x	57
+y	872
+
+clock	962
+dx	7
+dy	-6
+mac	XX:00:39
+master	
+name	u-39
+status	F
+width	1000
+x	308
+y	576
+
+clock	453
+dx	-8
+dy	-1
+mac	XX:00:40
+master	
+name	u-40
+status	F
+width	1000
+x	24
+y	201
+
+clock	434
+dx	8
+dy	-8
+mac	XX:00:41
+master	
+name	u-41
+status	F
+width	1000
+x	770
+y	438
+
+clock	797
+dx	1
+dy	-2
+mac	XX:00:42
+master	
+name	u-42
+status	F
+width	1000
+x	53
+y	372
+
+clock	43
+dx	3
+dy	-10
+mac	XX:00:43
+master	
+name	u-43
+status	F
+width	1000
+x	130
+y	274
+
+clock	29
+dx	0
+dy	9
+mac	XX:00:44
+master	
+name	u-44
+status	F
+width	1000
+x	980
+y	627
+
+clock	754
+dx	2
+dy	2
+mac	XX:00:45
+master	
+name	u-45
+status	F
+width	1000
+x	576
+y	636
+
+clock	711
+dx	-5
+dy	-10
+mac	XX:00:46
+master	
+name	u-46
+status	F
+width	1000
+x	77
+y	314
+
+clock	215
+dx	-8
+dy	5
+mac	XX:00:47
+master	
+name	u-47
+status	F
+width	1000
+x	473
+y	662
+
+clock	41
+dx	-8
+dy	4
+mac	XX:00:48
+master	
+name	u-48
+status	F
+width	1000
+x	56
+y	887
+
+clock	678
+dx	4
+dy	1
+mac	XX:00:49
+master	
+name	u-49
+status	F
+width	1000
+x	833
+y	572
+
+clock	423
+dx	-1
+dy	8
+mac	XX:00:50
+master	
+name	u-50
+status	F
+width	1000
+x	486
+y	365
+

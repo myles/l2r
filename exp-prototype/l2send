@@ -1,0 +1,22 @@
+#!/usr/bin/perl
+
+use Socket;
+
+require "discover.pl";
+
+%Interface = discover();
+
+$date = `date +%Y-%m-%d.%T`;
+
+socket(Sock, PF_INET, SOCK_DGRAM,getprotobyname("udp"));
+setsockopt(Sock, SOL_SOCKET, SO_BROADCAST, 1);
+
+foreach $dev (sort keys %Interface) {
+	$ip = inet_aton($Interface{$dev});
+
+	$port = sockaddr_in(2, $ip);
+
+	send(Sock, "@ARGV\ndate $date", 0, $port);
+	print "sent $dev->$Interface{$dev}: @ARGV\n";
+}
+

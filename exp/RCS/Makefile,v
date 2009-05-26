@@ -1,0 +1,46 @@
+head	1.2;
+access;
+symbols;
+locks
+	drew:1.2; strict;
+comment	@# @;
+
+
+1.2
+date	2001.09.10.10.48.21;	author drew;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2001.08.31.16.23.52;	author drew;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@*** empty log message ***
+@
+text
+@default:
+	./sim 2>&1 | tee Simulation.log
+
+ci:
+	ci -l Makefile sim *.pl
+
+print:
+	a2ps -4 --file-align=fill Makefile l2b l2r l2send  *.pl
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d2 1
+@

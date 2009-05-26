@@ -1,0 +1,412 @@
+#!/usr/bin/perl
+
+use Carp;
+
+$SIG{__DIE__} = \&Carp::confess;
+
+
+use Tk qw(exit);
+# use Tk::Xrm;
+
+use Tk::widgets qw(Button Label Menu Photo Optionmenu Pixmap Balloon);
+use Tk::widgets qw(Scrollbar Checkbutton Radiobutton Entry
+                   Message BrowseEntry Listbox);
+
+use Config;
+
+sub test_back_trace {
+ my ($w,$count) = @_;
+ if ($count) {
+   test_back_trace($w,$count-1);
+  } else {
+   $w->BackTrace("Moan");
+  }
+}
+
+sub back_trace {
+ my @info;
+ my $i = 0;
+ while (@info = caller($i)) {
+   print "$i: ",join(' ',@info),"\n";
+   $i++;
+  }
+}
+
+sub send_test {
+ my ($w) = @_;
+ my $result = eval { $w->send('basic_demo',"Hi there") };
+ die "Send failed '$@'" if ($@);
+ print "Send returned '$result'\n";
+}
+
+sub entry {
+ my $top = shift;
+ my $scroll = shift;
+ my $f  = ($scroll) ? $top->Frame() : $top;
+ my $e  = $f->Entry("-relief","ridge",@_);
+ $e->pack("-side"=>"top","-fill"=>"x","-expand"=>"yes");
+ $e->bind("<Any-Enter>", sub { shift->focus() });
+ $e->bind("<Any-FocusIn>",  sub { shift->configure("-relief" => "sunken") });
+ $e->bind("<Any-FocusOut>", sub { shift->configure("-relief" => "ridge" ) });
+ if ($scroll) {
+   my $es = $f->Scrollbar(-orient=>"horizontal","-command",["view",$e], -width => '4m');
+   $e->configure("-scrollcommand",["set",$es]);
+   $es->pack("-side"=>"bottom","-fill"=>"x");
+   $f->pack("-side","top");
+  }
+ return $e;
+}
+
+sub button {
+ return shift->Button(@_)->pack(-side => 'left');
+}
+
+sub checkbutton {
+ my $top = shift;
+ my $b = $top->Checkbutton(@_);
+ $b->pack(-side => 'left');
+ return $b;
+}
+
+sub radiobutton {
+ my $top = shift;
+ my $b = $top->Radiobutton(@_);
+ $b->pack(-side => 'left');
+ return $b;
+}
+
+sub label {
+ my $top = shift;
+ my $w = $top->Label((@_) ? @_ : ('-text' => "A Label") );
+ $w->pack("-side"=>"bottom","-fill"=>"x");
+ return $w;
+}
+
+sub menubar {my $top  = shift;
+ my $menu = $top->Menubar;
+ my $file = $menu->Menubutton("-text" => "File","-underline" => 0, -bg => 'ivory',
+            -tearoff => 0
+           );
+ $file->command("-label","Save","-command" => sub { print "Save\n" },"-underline" => 0);
+ $file->command("-label","Delete","-command" => sub { print "Delete\n" },"-underline" => 0);
+ $file->separator;
+ $file->command("-label","Quit","-command" => sub { exit },"-underline" => 0);
+
+ $file = $menu->Menubutton(-text => "Options", -underline => 0, -font => 'fixed');
+
+ $file->checkbutton('-label' => 'Strict ~Motif', '-variable' => 'Tk::strictMotif');
+
+ $file->separator;
+ $file->checkbutton('-label' => 'Oil checked', '-variable' => 'main::oil');
+ $file->checkbutton('-label' => 'Water checked', '-variable' => \$Water);
+ my $om = $file->cget('-menu');
+ $om->bind('<ButtonRelease-1>',[ sub {my ($b,$arg,$orig) = @_; print "Hey ",join(' ',map($_->PathName,$b,$arg),$orig),"\n";}, $om, $om->PathName] );
+ $file->command("-label","Interps", "-underline" => 0,
+   "-command"  =>  sub { print 'Interps(',join(',',$file->interps),")\n" } );
+
+ $file = $menu->Menubutton(-text => "Exceptions",  -underline => 0);
+
+ $file->command("-label","Busy","-command"  => \&MakeBusy,"-underline" => 0);
+ $file->command("-label","Exit","-command"  => sub { exit 0 },"-underline" => 0);
+ $file->command("-label","Close","-command" => sub { close Gibberish },"-underline" => 0);
+ $file->command("-label","Moan","-command"  => [ \&test_back_trace, $menu, 3 ],"-underline" => 0);
+ $file->command("-label","Trace","-command" => \&back_trace,"-underline" => 0);
+ $file->command("-label","Wrong","-command" => sub { $top->configure(-gibberish => 'junk') });
+ $file->command("-label","Send","-command"  => [\&send_test,$top] );
+
+ $menu->separator;
+
+ $menu->cascade(-label => 'Other', -underline => 1,
+                              -menuitems => [[ Command => '~Busy',
+                               -command => \&MakeBusy]]
+                             );
+
+
+ $menu->cascade(-label => 'Help', -underline => 0,
+                              -menuitems => [[ Command => '~Versions', -command => [\&ShowVersion, $top ]]]
+                             );
+ return $menu;
+}
+
+sub popdown {
+ my $w = shift;
+ my $top = $w->MainWindow;
+ $top->configure("-cursor"=> $w->{Cursor});
+ $w->grab("release");
+ $w->withdraw;
+}
+
+
+sub dialogue {my $top = shift;
+ my $t = $top->Toplevel("-class","Dialogue",
+               # -screen => $ENV{'DISPLAY'}
+               );
+ my $l = &label($t,@_);
+ my $b = &button($t,"-text","OK","-command"=>[ \&popdown ,$t]);
+ $t->wm("group",$top);
+ $t->wm("transient",$top);
+ $t->wm("withdraw");
+ $t->wm("minsize",0,0);
+ $l->pack("-side"=> "top", "-expand" => 1, "-fill" => "both");
+ $b->pack("-side"=> "bottom");
+ $t->wm("protocol","WM_DELETE_WINDOW",[\&popdown,$t]);
+ return $t;
+}
+
+$top = MainWindow->new();
+
+$top->optionAdd($top->Name.'*Dialog*Background', 'yellow');
+
+$Tk::_mw_ = $top;
+
+$top->bind('MainWindow','<Map>',
+            sub {
+                 printf "Mapped %.3g Sec. after bootstrap (u=%.3g s=%.3g)\n",Tk::Time_So_Far,times;
+                 printf("%gK\n",Memory->used/1024) if (defined &Memory::used);
+                 system("/bin/ps","-o",'vsz,osz,rss,pmem,time','-p',$$) if ($^O eq 'solaris');
+                }
+          );
+
+$camel   = $top->Photo(-format => 'gif', -file => Tk->findINC("Xcamel.gif"));
+
+# print "camel is ",$camel->width," wide\n";
+
+sub ShowVersion {my ($top) = @_;
+ my $d = $top->Dialog(-title => 'Versions',
+                      -popover => $top,
+                      -image => $camel,
+                      -fg  => '#800000',
+                      -text =>
+"Core Tk version : $Tk::version
+Tk patchLevel : $Tk::patchLevel
+library : $Tk::library
+perl/Tk Version : $Tk::VERSION\n",-justify => 'center');
+ $d->Show;
+}
+sub MakeBusy {
+ $top->Busy(-recurse => 1);
+ warn "Waiting\n";
+ my $done = 0;
+ $top->after(6000, sub { $done = 1; warn "Fired\n" });
+ Tk::DoOneEvent(0) until ($done);
+ $top->Unbusy
+}
+
+
+$fred = "Initial Text";
+$oil  = 1;
+my $bl = $top->Balloon;
+
+&menubar($top);
+
+my $bf = $top->Frame->pack(-fill => 'x');
+
+my $q = &button($bf,"-image",$QuitPB,"-activeimage",$QuitPBa,
+        "-command", sub { exit });
+$bl->attach($q, -msg => "Exit Application");
+
+&button($bf,"-text","Cluster","-command", \&cluster_all);
+
+$main::Water = 1;
+
+$entry = &entry($top,0,"-width","30","-textvariable",\$fred);
+
+&label($top,"-bitmap"=>"info");
+
+$top->Icon(-image => $camel);
+
+$top->property("set",MYPROP,AREA,32,[1,2,3,4,5]);
+
+$top->update("idletasks");
+
+if ($^O ne 'MSWin32') {
+  if (open(Gibberish, '<&STDIN')) {
+    $top->fileevent(Gibberish,'readable',
+        [sub { my ($fh) = @_; print "stdin:",scalar <$fh> },\*Gibberish]);
+   }
+  else {
+    warn "Cannot open /dev/tty:$!";
+   }
+ }
+
+#============================================================================
+# Battlefield tools
+#============================================================================
+my $Battlefield = $top->Scrolled('Canvas',
+	-height => 600, -width =>900,
+#	-fillx => 1, -filly => 1
+	)->pack(
+	-side => 'right', -fill => 'both', -expand => 1);
+
+my %Radios;
+
+#my $Width = 20_000;
+my $Width = 2_000;
+my $Range = 500;
+my $Units = 150;
+my $Scale = 5;
+
+sub new_radio {
+	my($n, $x, $y) = @_; 
+
+	$Radios{$n}->{name} = $n;
+	$Radios{$n}->{x} = rand($Width);
+	$Radios{$n}->{y} = rand($Width);
+	$Radios{$n}->{status} = 'F';
+}
+
+sub set {
+	my($i, $n, $ir, $nr) = @_;
+
+	$i->{status} = $ir if $ir ne '.';
+	$n->{status} = $nr if $nr ne '.';
+
+	if ($ir eq 'M') {
+		$n->{master} = $i->{name};
+	}
+	if ($nr eq 'M') {
+		$i->{master} = $n->{name};
+	}
+
+	print "Set $i->{name} -> $ir, $n->{name} -> $nr\n";
+}
+
+sub hear {
+	my($i, $n) = @_;
+	my($id);
+
+	# FASBM
+	$id = $i->{status} .  $n->{status};
+
+	set($i, $n, 'A', 'A') if $id eq 'FF';
+	set($i, $n, 'S', 'M') if $id eq 'FA';
+	set($i, $n, 'B', 'S') if $id eq 'FS';
+	set($i, $n, 'M', 'S') if $id eq 'FB';
+	set($i, $n, 'S', 'M') if $id eq 'FM';
+
+	set($i, $n, 'M', 'S') if $id eq 'AF';
+	set($i, $n, 'M', 'S') if $id eq 'AA';
+	set($i, $n, 'M', 'S') if $id eq 'AS';
+	set($i, $n, 'M', '.') if $id eq 'AB';
+	set($i, $n, 'B', '.') if $id eq 'AM';
+
+	set($i, $n, '.', 'A') if $id eq 'SF';
+	set($i, $n, '.', 'M') if $id eq 'SA';
+	set($i, $n, '.', '.') if $id eq 'SS';
+	set($i, $n, '.', '.') if $id eq 'SB';
+	set($i, $n, '.', '.') if $id eq 'SM';
+
+	set($i, $n, '.', 'M') if $id eq 'BF';
+	set($i, $n, '.', 'M') if $id eq 'BA';
+	set($i, $n, '.', '.') if $id eq 'BS';
+	set($i, $n, '.', '.') if $id eq 'BB';
+	set($i, $n, '.', '.') if $id eq 'BM';
+
+	set($i, $n, 'M', 'S') if $id eq 'MF';
+	set($i, $n, 'M', 'S') if $id eq 'MA';
+	set($i, $n, 'M', 'S') if $id eq 'MS';
+	set($i, $n, 'M', 'B') if $id eq 'MB';
+	set($i, $n, 'M', 'B') if $id eq 'MM';
+}
+
+sub inrange {
+	my($a, $b) = @_;
+
+	my $ax = $a->{x};
+	my $ay = $a->{y};
+
+	my $bx = $b->{x};
+	my $by = $b->{y};
+
+	my $dx = abs($ax - $bx);
+	my $dy = abs($ay - $by);
+
+	return sqrt($dx*$dx + $dy*$dy) < ($Range/2);
+}
+
+sub show_radio {
+	my($n) = @_; 
+	my($unit) = $Radios{$n};
+
+	my(%Color) = (
+		'M' => '#ff0000', 	# Master   red
+		'A' => '#ffff00', 	# Aprentis yellow
+		'B' => '#00ff00', 	# Bonds    green
+		'S' => '#00ffff', 	# Slaves   cyan
+		'F' => '#0000ff');	# Freemen  blue
+
+	my($x) = $unit->{x} / $Scale;
+	my($y) = $unit->{y} / $Scale;
+	my($range) = $Range / $Scale / 2;
+	my($tag) = "u$n";
+
+	my($color) = $Color{$unit->{status}};
+
+	if ($unit->{status} eq 'S') {
+		$master = $Radios{$unit->{master}};
+		my($mx) = $master->{x} / $Scale;
+		my($my) = $master->{y} / $Scale;
+
+		$Battlefield->createOval($x-$range, $y-$range,
+					 $x+$range, $y+$range,
+					-outline => $color,
+					-tags => $tag);
+		$Battlefield->createLine($x, $y, $mx, $my, 
+				-fill => $color, 
+				-arrow => 'last',
+				-tags => $tag);
+	} else {
+		$Battlefield->createOval($x-$range, $y-$range,
+					 $x+$range, $y+$range,
+					-outline => $color,
+					-tags => $tag);
+	}
+	$Battlefield->createOval($x-2, $y-2, $x+2, $y+2, 
+		-outline => $color, -tags => $tag);
+}
+
+sub say {
+	my($unit) = @_;
+	my($i, $other);
+	
+	foreach $i (keys %Radios) {
+		$other = $Radios{$i};
+
+		next if $unit->{name} eq  $other->{$name};
+		next if $unit->{status} eq 'S';
+
+		next unless inrange($unit, $other);
+
+		hear($unit, $other);
+	}
+}
+
+sub cluster_all {
+	my($i);
+
+	foreach $i (keys %Radios) {
+		say($Radios{$i});
+	}
+	foreach $i (keys %Radios) {
+		show_radio($i);
+	}
+}
+
+#============================================================================
+# Build Canvas
+#============================================================================
+
+if (@ARGV) {
+  $top->CmdLine;
+  print "ARGV now ",join(' ',@ARGV),"\n"
+ }
+
+foreach $i (1..$Units) {
+	new_radio($i);
+}
+
+cluster_all();
+	
+#$Battlefield->configure(-scrollregion => $Battlefield->bbox('all'));
+
+Tk::MainLoop();

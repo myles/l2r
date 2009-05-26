@@ -1,0 +1,11 @@
+exp		-- current demo (== sim-ghost-1)
+exp-prototype
+new
+notes
+prototype
+sim-drew-1
+sim-drew-2
+sim-ghost-1	-- first cut at ghost rules
+sim-ghost-2	-- add merge logic
+sim-ghost-3	-- rewrite to use drew clustering.
+simulator

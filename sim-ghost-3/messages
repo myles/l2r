@@ -1,0 +1,73 @@
+I me-name status [master]
+M me-slave you-master
+S me-master you-slave
+B me-name you-via for-master
+F me-master
+
+name    radio's name (u-1)
+mac     radio's mac address (XX:00:01)
+status  one of [M S B F]
+
+master  for S and B the name of my master (u-34)
+
+arp     HASH name => mac
+bond    HASH from => to   
+masters	HASH name => via
+slaves  HASH name => ttp
+
+clock   834
+range   500		radio range
+width   1000		width of map
+dx      -9 .. 9		movement x speed
+dy      -9 .. 9		movement y speed
+x       1 .. width	possition x co-ord
+y       1 .. width	possition y co-ord
+
+arp     HASH(0x8423ddc)
+# u-15 XX:00:15 u-34 XX:00:34 u-3 XX:00:03 u-22 XX:00:22 u-39 XX:00:39
+bond    HASH(0x843c4e4)
+# u-34 u-3
+clock   834
+dx      -8
+dy      0
+mac     XX:00:01
+master  u-34
+name    u-1
+status  B
+ttl     10
+width   1000
+x       462
+y       963
+
+
+Tick 0.167 0.0  XX:00:15
+----------------------------------------------------------------------     0.167
+Transmit XX:00:15 == u-15     msg: I u-15 F  
+Receive  XX:00:15 => XX:00:12 msg: I u-15 F  
+Receive  XX:00:15 => XX:00:06 msg: I u-15 F  
+----------------------------------------------------------------------     0.168
+Transmit XX:00:12 == u-12     msg: M u-12 u-15
+Receive  XX:00:12 => XX:00:15 msg: M u-12 u-15
+Me (u-15) got slave: XX:00:12 u-12
+Receive  XX:00:12 => XX:00:06 msg: M u-12 u-15
+----------------------------------------------------------------------     0.169
+Transmit XX:00:06 == u-6      msg: M u-6 u-15
+Receive  XX:00:06 => XX:00:12 msg: M u-6 u-15
+Receive  XX:00:06 => XX:00:15 msg: M u-6 u-15
+Me (u-15) got slave: XX:00:06 u-6
+----------------------------------------------------------------------     0.170
+Transmit XX:00:15 == u-15     msg: S u-15 u-12
+Receive  XX:00:15 => XX:00:12 msg: S u-15 u-12
+Me (u-12) now slave of: XX:00:15 u-15
+Receive  XX:00:15 => XX:00:06 msg: S u-15 u-12
+----------------------------------------------------------------------     0.171
+Transmit XX:00:15 == u-15     msg: S u-15 u-6
+Receive  XX:00:15 => XX:00:12 msg: S u-15 u-6
+Receive  XX:00:15 => XX:00:06 msg: S u-15 u-6
+Me (u-6) now slave of: XX:00:15 u-15
+----------------------------------------------------------------------     0.172
+Transmit XX:00:06 == u-6      msg: M u-6 u-12
+Receive  XX:00:06 => XX:00:12 msg: M u-6 u-12
+Me (u-12) got slave: XX:00:06 u-6
+Receive  XX:00:06 => XX:00:15 msg: M u-6 u-12
+

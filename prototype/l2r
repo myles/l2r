@@ -1,0 +1,333 @@
+#!/usr/bin/perl -w
+
+use strict;
+
+use Socket;
+use IO::Socket::INET;
+
+require "discover.pl";
+require "broadcast.pl";
+require "mac.pl";
+require "route.pl";
+
+print "l2r Startup.\n";
+
+unless (-d '/etc/l2r') {
+	mkdir('/etc/l2r', 755) or die;
+}
+open(PROC, "> /proc/sys/net/ipv4/ip_forward");
+print PROC 1;
+close PROC;
+system('./route-clear | sh -x');
+
+my($Serial) = 0;
+my($Me);
+my($Ip);
+my($Pid);
+my($Debug) = 1;
+
+&load_serial();
+&load_config();
+
+my(%Packet);
+
+my(%Route);
+my(%Seen);
+
+my($Sock) = new IO::Socket::INET(LocalPort => 2, Proto => 'udp')
+	or die "socket: $@";
+
+&iamsend();
+&run;
+
+END {
+	kill 9, $Pid if $Pid;
+}
+
+sub iamsend {
+	my($i, $localport);
+
+	my($host) = `hostname`;		chomp($host);
+	my ($ip) = `hostname -i`;	chomp($ip);
+	my ($mac) = mac_get_name();
+
+	my($iam) = "iam $Me $mac $ip $host\n";
+	if ($Pid = fork()) {
+		return;
+	}
+	socket(Send, PF_INET, SOCK_DGRAM,getprotobyname("udp"));
+
+	$localport = sockaddr_in(2, INADDR_LOOPBACK);
+	for (;;) {
+		broadcast($iam . 'path', ++$Serial, $Me);
+		save_serial();
+		for ($i=0; $i < 3; ++$i) {
+			send(Send, "tick 1", 0, $localport);
+			sleep(3);
+		}
+	}
+}
+
+1;
+
+sub run {
+	my($him, $datagram);
+
+	while ($him = $Sock->recv($datagram, 1500, 0)) {
+		$Ip = inet_ntoa(substr($him, 4, 4));
+print "From: $Ip\n" if $Debug > 1;
+		process($datagram);
+
+		save_path();
+	}
+}
+
+sub process {
+	my($line);
+
+	%Packet = ();
+
+	foreach $line (split(/\n/, $_[0])) {
+		&handle(split(' ', $line));
+	}
+}
+
+# path
+# iam
+# auth
+# ping
+# ship
+# dead
+
+sub handle {
+	my($cmd, @arg) = @_;
+
+	return unless defined $cmd;
+	return if $cmd eq '';
+
+	if ($cmd eq 'broadcast') {
+		my($ser) = shift (@arg);
+
+		return if $Seen{$ser}++;
+		broadcast('broadcast', $ser, @arg);
+		&handle(@arg);
+		
+		return;
+	}
+
+	if ($cmd eq 'on') {
+		my($host) = shift (@arg);
+		my($ser) = shift (@arg);
+
+		return if $Seen{$ser}++;
+		broadcast('on', $host, $ser, @arg);
+
+		&handle(@arg) if $host eq $Me;
+		
+		return;
+	}
+
+	if ($cmd eq 'debug') {
+		$Debug = shift (@arg);
+		return;
+	}
+
+	if ($cmd eq 'tick') {
+		tick(@arg);
+		return;
+	}
+
+	$Packet{$cmd} = "@arg" ;
+
+	print "Got: $cmd @arg\n" if $Debug > 1;
+
+	if ($cmd eq 'restart') {
+		save_serial();
+		kill 15, $Pid;
+
+		print "Restarting...";
+		eval {
+			exec $0;
+		};
+		print "Exec failed. $@\n";
+		return;
+	}
+
+	if ($cmd eq 'path') {
+		&path(@arg);
+		return;
+	}
+
+	if ($cmd eq 'iam') {
+		my($name, $mac, $ip, $host) = @arg;
+print "new-host-iam $name === $mac, $ip, $host\n" unless $Route{$name}{'ip'};
+		$Route{$name}{'mac'} = $mac;
+		$Route{$name}{'ip'} = $ip;
+		$Route{$name}{'domain'} = $host;
+		return;
+	}
+
+	if ($cmd eq 'ship') {
+		print "Ship not impleted\n";
+		return;
+	}
+
+	if ($cmd eq 'dead') {
+		print "Dead not impleted\n";
+		return;
+	}
+
+	if ($cmd eq 'ping') {
+		print "Ping not impleted\n";
+		return;
+	}
+
+	if ($cmd eq 'auth') {
+		print "Auth not impleted\n";
+		return;
+	}
+
+	if ($cmd eq 'date') {
+		return;
+	}
+
+	print "Command '$cmd' unknown.\n";
+}
+
+#
+# path SERIAL host last next ... first
+#
+sub path {
+	my(@arg) = @_;
+	my($ser) = shift @arg;
+	my($host) = shift @arg;
+
+	if ($host eq $Me) {
+		print "path is me\n" if $Debug > 2;
+		return;
+	}
+
+	if (defined $Route{$host}{'serial'}) {
+
+		if ($ser <= $Route{$host}{'serial'}) {
+			print "Seen ser $ser for $host = $Route{$host}{'serial'}\n" if $Debug > 2;
+			return;
+		}
+	}
+
+	$Route{$host}{'ttl'} = 10;
+	$Route{$host}{'serial'} = $ser;
+
+	unless (defined $Route{$host}{'path'}) {
+		$Route{$host}{'via'} = $Ip;
+
+		if (@arg) {
+			$Route{$host}{'path'} = "@arg";
+			my($ip) = $Route{$host}{'ip'};
+			print "New route to $host ($ip) via $Ip (@arg)\n";
+			route_add($ip, $Ip);
+		} else {
+			$Route{$host}{'path'} = "";
+			print "Direct route: $host\n";
+		}
+	} elsif ($Route{$host}{'via'} eq $Ip) {
+		print "Bless $host the network didn't change.\n" if $Debug > 1;
+	} else {
+		my($ip) = $Route{$host}{'ip'};
+
+		my($old) = $Route{$host}{'path'};
+		print "Change route for $host ($ip) via $Ip (@arg) was $old\n";
+		route_del($ip);
+		route_add($ip, $Ip);
+		$Route{$host}{'via'} = $Ip;
+		$Route{$host}{'path'} = "@arg";
+	}
+
+	my($iam) = 'iam ' . $Packet{'iam'} . "\n";
+	broadcast($iam . 'path', $ser, $host, @arg, $Me);
+
+	return;
+}
+
+sub tick {
+	my($host, $ip);
+
+	foreach $host (keys %Route) {
+		next if ($host eq $Me);
+
+		print "tick $host $Route{$host}{'ttl'}\n" if $Debug > 2;
+		if ($Route{$host}{'ttl'}-- <= 0) {
+			$ip = $Route{$host}{'ip'};
+			print "He's dead jim: lost route: $host($ip)\n";
+			route_del($ip);
+			delete $Route{$host};
+		}
+	}
+	print "----------------------------------------------\n" if $Debug > 2;
+}
+
+sub load_serial {
+	unless (open(SERIAL, "< /etc/l2r/serial")) {
+		$Serial = 1;
+		return;
+	}
+	$Serial = <SERIAL>; chomp $Serial;
+	close(SERIAL);
+	print "Serial: $Serial\n";
+}
+
+sub save_serial {
+	unless (open(SERIAL, "> /etc/l2r/serial")) {
+		$Serial = 1;
+		return;
+	}
+	print SERIAL $Serial, "\n";
+	close SERIAL;
+}
+
+sub load_config {
+	unless (open(CONFIG, "< /etc/l2r/config")) {
+		$Me = mac_get_name();
+		return;
+	}
+	while (<CONFIG>) {
+		next if /^#/;
+		next if /^\s+$/;
+
+		chomp;
+		if (/^name\s+(\S+)/) {
+			$Me = $1;
+			print "name $Me\n";
+		}
+
+		if (/^debug\s+(\S+)/) {
+			$Debug = $1;
+			print "debug $Debug\n";
+		}
+	}
+	close(CONFIG);
+}
+
+sub save_config {
+	unless (open(CONFIG, "> /etc/l2r/config")) {
+		$Serial = 1;
+		return;
+	}
+	print CONFIG $Serial, "\n";
+	close CONFIG;
+}
+
+sub save_path {
+	my($host, $ip, $ser, $path);
+
+	open(PATH, "> /etc/l2r/paths");
+
+	foreach $host (sort keys %Route) {
+		$ip   = $Route{$host}{'ip'} || '';
+		$ser  = $Route{$host}{'serial'} || '';
+		$path = $Route{$host}{'path'} || '';
+
+		print PATH "$ser\t$ip\t$host $path\n";
+	}
+	close(PATH);
+}

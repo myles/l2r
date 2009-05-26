@@ -1,0 +1,688 @@
+#!/usr/bin/perl -w
+
+use Carp;
+use strict;
+
+$SIG{__DIE__} = \&Carp::confess;
+
+my $Debug = 0;
+my $Version = '$Id: sim,v 1.14 2001/09/10 10:48:21 drew Exp drew $';
+my $Visual_mode = 0;
+
+use Tk qw(exit);
+# use Tk::Xrm;
+
+use Tk::widgets qw(Button Label Menu Photo Optionmenu Pixmap Balloon);
+use Tk::widgets qw(Scrollbar Checkbutton Radiobutton Entry
+                   Message BrowseEntry Listbox Dialog);
+
+my $Show_messages = 1;
+my $In_range = 0;
+my @Transmit;
+my $Running;
+
+use Config;
+
+sub back_trace {
+	my ($package, $file, $line, $sub);
+	my $i = 0;
+
+	while (($package, $file, $line, $sub) = caller($i)) {
+		$file =~ s=.*/==;
+		printf "%3d: %-30s +%d %s\n", $i, $sub, $line, $file;
+		$i++;
+	}
+}
+
+sub abort {
+	$Running = 0;
+	dump_all("Simulation.bug");
+
+	print "\a";
+	print "*" x 78, "\n";
+	print  "@_\n";
+	print "*" x 78, "\n";
+
+	&back_trace();
+	print "*" x 78, "\n";
+
+	die "aborted\n";
+}
+
+sub entry {
+	my $top = shift;
+	my $scroll = shift;
+	my $f  = ($scroll) ? $top->Frame() : $top;
+	my $e  = $f->Entry("-relief","ridge",@_);
+	$e->pack("-side"=>"top","-fill"=>"x","-expand"=>"yes");
+	$e->bind("<Any-Enter>", sub { shift->focus() });
+	$e->bind("<Any-FocusIn>",  sub { shift->configure("-relief" => "sunken") });
+	$e->bind("<Any-FocusOut>", sub { shift->configure("-relief" => "ridge" ) });
+	if ($scroll) {
+	   my $es = $f->Scrollbar(-orient=>"horizontal","-command",["view",$e], -width => '4m');
+	   $e->configure("-scrollcommand",["set",$es]);
+	   $es->pack("-side"=>"bottom","-fill"=>"x");
+	   $f->pack("-side","top");
+	}
+	return $e;
+}
+
+sub button {
+	return shift->Button(@_)->pack(-side => 'left');
+}
+
+sub checkbutton {
+	my $top = shift;
+	my $b = $top->Checkbutton(@_);
+	$b->pack(-side => 'left');
+	return $b;
+}
+
+sub radiobutton {
+	my $top = shift;
+	my $b = $top->Radiobutton(@_);
+	$b->pack(-side => 'left');
+	return $b;
+}
+
+sub label {
+	my $top = shift;
+	my $w = $top->Label((@_) ? @_ : ('-text' => "A Label") );
+	$w->pack("-side"=>"bottom","-fill"=>"x");
+	return $w;
+}
+
+sub menubar {
+	my $top  = shift;
+	my $menu = $top->Menubar;
+	my $file = $menu->Menubutton(-text => "File");
+
+	$file->command(-label => "Save",    -command => \&dump_all);
+	$file->separator;
+	$file->command(-label => "Options", -command => \&options);
+	$file->separator;
+	$file->command(-label => "Quit",    -command => sub { exit });
+
+	$file = $menu->Menubutton(-text => "Exceptions");
+
+	$file->checkbutton(-label => 'Show messages', -variable => \&Show_messages);
+	$file->separator;
+	$file->command("-label","Busy","-command"  => \&MakeBusy,"-underline" => 0);
+	$file->command("-label","Exit","-command"  => sub { exit 0 },"-underline" => 0);
+
+	$menu->cascade(-label => 'Help', -underline => 0,
+	      -menuitems => [[ Command => '~Versions', -command => \&ShowVersion]]
+				     );
+	return $menu;
+}
+
+my $top = MainWindow->new();
+
+$top->optionAdd($top->Name.'*Dialog*Background', 'yellow');
+
+$Tk::_mw_ = $top;
+
+$top->bind('MainWindow','<Map>',
+	sub {
+                 printf "Mapped %.3g Sec. after bootstrap (u=%.3g s=%.3g)\n",Tk::Time_So_Far,times;
+                 printf("%gK\n",Memory->used/1024) if (defined &Memory::used);
+                 system("/bin/ps","-o",'vsz,osz,rss,pmem,time','-p',$$) if ($^O eq 'solaris');
+	}
+);
+
+my $camel   = $top->Photo(-format => 'gif', -file => Tk->findINC("Xcamel.gif"));
+
+# print "camel is ",$camel->width," wide\n";
+
+sub ShowVersion {
+	my $d = $top->Dialog(
+		-title => 'Versions',
+		-popover => $top,
+		-image => $camel,
+		-fg  => '#800000',
+		-justify => 'center',
+		-text => <<"EOF",
+Radio Simulator: $Version
+Core Tk version: $Tk::version
+Tk patchLevel:   $Tk::patchLevel
+Library:         $Tk::library
+perl/Tk Version: $Tk::VERSION
+EOF
+	);
+	$d->Show;
+}
+
+sub MakeBusy {
+	$top->Busy(-recurse => 1);
+	warn "Waiting\n";
+	my $done = 0;
+	$top->after(6000, sub { $done = 1; warn "Fired\n" });
+	Tk::DoOneEvent(0) until ($done);
+	$top->Unbusy
+}
+
+&menubar($top);
+
+#---------------------------------------------------------------------------
+# Button Bar
+#---------------------------------------------------------------------------
+my $bf = $top->Frame->pack(-fill => 'x');
+&button($bf, -text => 'Exit',    -command => sub { exit });
+&button($bf, -text => 'Options', -command => \&options);
+&button($bf, -text => 'Restart', -command => \&restart);
+&button($bf, -text => 'Xmit',    -command => \&transmit_step);
+&button($bf, -text => 'Step',    -command => \&cluster_step);
+&button($bf, -text => 'Cluster', -command => \&cluster_all);
+&button($bf, -text => 'Run',     -command => \&run_all);
+&button($bf, -text => 'Stop',    -command => \&stop_all);
+
+sub cmd {
+$bf->Entry(-textvariable => \$In_range)->pack(-side => 'right');
+$bf->Label(-text => 'In Range')->pack(-side => 'right');
+
+#---------------------------------------------------------------------------
+my $Command = "";
+$bf->Button(-text => 'Go', -command => [ \&command, \$Command ])->pack(-side => 'right');
+$bf->Entry(-textvariable =>\$Command)->pack(-side =>'left', -fill => 'x');
+}
+
+sub command {
+	my($cmd) = @_;
+
+	print "+ $$cmd\n";
+}
+
+
+#============================================================================
+# Battlefield tools
+#============================================================================
+my $Battlefield = $top->Scrolled('Canvas',
+	-height => 600, -width => 500,
+#	-fillx => 1, -filly => 1
+	)->pack(
+	-side => 'right', -fill => 'both', -expand => 1);
+
+
+
+$top->update("idletasks");
+
+my %Radios;	# list of all radios
+my %Arp;	# arp table for show_radios
+
+#my $Width = 20_000;
+my $Width = 1_000;
+my $Range = 500;
+my $Units = 15;
+my $Scale = 3;
+
+$Battlefield->createRectangle(0,0,$Width/$Scale,$Width/$Scale);
+
+sub get_value {
+	my($w, $text, $refvar) = @_;
+
+	my $f = $w->Frame();
+	my $l = $f->Label(-text => $text);
+	 $l->pack(-side => "left");
+
+	my $t = $f->Entry(-textvariable => $refvar)->pack(
+		-side => 'right', -fill => 'x');
+
+	$f->pack(-fill => 'x', -side => 'top');
+}
+
+sub options {
+	my $win = MainWindow->new();
+
+	get_value($win, 'Width', \$Width);
+	get_value($win, 'Range', \$Range);
+	get_value($win, 'Units', \$Units);
+	get_value($win, 'Scale', \$Scale);
+	get_value($win, 'Visual', \$Visual_mode);
+}
+
+sub inrange {
+	my($a, $b) = @_;
+
+	my $ax = $a->{x};
+	my $ay = $a->{y};
+
+	my $bx = $b->{x};
+	my $by = $b->{y};
+
+	my $dx = abs($ax - $bx);
+	my $dy = abs($ay - $by);
+
+#	return sqrt($dx*$dx + $dy*$dy) < ($Range/2);
+	return $dx*$dx + $dy*$dy < ($Range*$Range/4);
+}
+
+sub delete_radio {
+	my($mac) = @_;
+
+	$Battlefield->delete($Radios{$mac}->{name});
+	delete $Radios{$mac};
+}
+
+sub show_radio {
+	my($unit) = @_; 
+	my($c, $o, $l);
+
+	my(%Color) = (
+		'M' => 'red', 		# Master   Clortho
+		'A' => 'green', 	# Aprentis ?
+		'B' => 'yellow', 	# Bonds    Zuul
+		'W' => 'purple', 	# WeakBond Weak Zuul
+		'S' => 'cyan', 		# Slaves   Venkmann
+		'F' => 'blue');		# Freemen  Egon
+
+
+	my($x, $y) = unit_pos($unit);
+
+	my($range) = $Range / $Scale / 2;
+	my($tag) = $unit->{name};
+
+	$Battlefield->delete($tag);
+
+	my($color) = $Color{$unit->{status}};
+
+	if ($unit->{status} eq 'M') {
+		$color = 'orange' unless $unit->have_slaves();
+	}
+
+	$Battlefield->createOval($x-$range, $y-$range,
+				 $x+$range, $y+$range,
+				-outline => $color,
+				-tags => $tag);
+	$Battlefield->createOval($x-2, $y-2, $x+2, $y+2, 
+		-outline => $color, -tags => $tag);
+
+	if ($unit->{status} eq 'S') {
+		my $master = $unit->{master};
+		abort("slave $unit->{name} has no master") unless $master;
+
+		$master = $Radios{$Arp{$master}};
+
+		$Battlefield->createLine($x, $y, unit_pos($master),
+				-fill => $color, 
+				-arrow => 'last',
+				-tags => $tag);
+	}
+
+	if ($unit->{status} eq 'W') {
+		my($to, $from,$master);
+		foreach $from (keys %{$unit->{link}}) {
+			$to = $unit->{link}{$from};
+			$master = $unit->{master};
+print "link $master -> $unit->{name} -> $from -> $to\n";
+
+			$Battlefield->createLine(
+				unit_pos($Radios{$Arp{$master}}),
+				$x, $y, 
+				unit_pos($Radios{$Arp{$from}}),
+				unit_pos($Radios{$Arp{$to}}),
+				-fill => 'purple',
+				-width => 1, 
+				-arrow => 'last',
+				-tags => $tag);
+		}
+	}
+
+	if ($unit->{status} eq 'B') {
+		my($to, $to_radio, $from, $from_radio);
+
+		foreach $from (keys %{$unit->{bond}}) {
+			$to = $unit->{bond}{$from};
+			$to_radio = $Radios{$Arp{$to}};
+			abort("Bad bond for $unit->{name}") unless $to_radio;
+print "bond $from -> $to\n";
+			$Battlefield->createLine($x, $y, 
+				unit_pos($to_radio),
+				-fill => 'yellow',
+				-width => 2, 
+				-arrow => 'last',
+				-tags => $tag);
+
+			$Battlefield->createLine($x, $y, 
+				unit_pos($Radios{$Arp{$from}}),
+				-fill => 'yellow',
+				-width => 2, 
+				-arrow => 'last',
+				-tags => $tag);
+		}
+	}
+
+}
+
+sub unit_pos {
+	my($unit) = @_;
+
+	abort("$unit->{name} has no x/y") unless defined $unit->{x} and defined $unit->{y};
+
+	my($x) = int($unit->{x} / $Scale);
+	my($y) = int($unit->{y} / $Scale);
+
+	print "$unit->{name} = $x, $y\n" if $Debug;
+
+	return ($x, $y);
+}
+
+sub say {
+	my($unit, $msg) = @_;
+	my($mac, $other);
+	my($frommac) = $unit->{mac};
+	
+printf "Transmit $frommac == %-8s msg: %s\n", $unit->{name}, $msg;
+	foreach $mac (keys %Radios) {
+		$other = $Radios{$mac};
+
+		next if $frommac eq  $other->{mac};
+
+		next unless inrange($unit, $other);
+
+		$Battlefield->createLine(unit_pos($unit), unit_pos($other),
+				-arrow => 'last',
+				-tags => 'messages');
+
+		$other->receive($frommac, $msg);
+		++$In_range;
+	}
+}
+
+my @Talk;
+my $Clock = 0;
+my $Tick  = 0;
+
+sub display_time {
+	my($char) = @_;
+	printf "%-70s %5d.%03d\n",  $char x 70, $Clock, $Tick;
+}
+
+sub transmit_work {
+	my($radio, $msg);
+
+	return unless @Transmit;
+
+	display_time('-');
+
+	$radio = shift @Transmit;
+	$msg   = shift @Transmit;
+
+	say($radio, $msg);
+
+	++$Tick;
+}
+
+sub transmit_step {
+	$Battlefield->delete('messages');
+
+	if (@Transmit == 0) {
+		cluster_work();
+	}
+	transmit_work();
+	show_all();
+}
+
+sub cluster_work {
+	my($radio, $cnt, $mac);
+
+	display_time('=');
+
+	$cnt = @Talk;
+	if ($cnt == 0) {
+		@Talk = get_ticks();
+		$cnt = @Talk;
+	}
+	
+	$In_range = 0;
+	while ($In_range == 0 && @Talk) {
+		--$cnt;
+		$radio = pop @Talk;
+		$mac   = $radio->{mac};
+
+		print "Tick $Clock.$Tick\t$mac $radio->{status} $radio->{name}\n";
+		$radio->tick();
+	}
+	
+}
+
+sub cluster_step {
+	$Battlefield->delete('messages');
+
+	while (@Transmit) {
+		transmit_work();
+	}
+	cluster_work();
+	show_all();
+}
+
+sub cluster_all {
+	my($i);
+	my($clock) = $Clock;
+
+	display_time('*');
+
+	$Battlefield->delete('messages');
+	while ($clock == $Clock) {
+		while (@Transmit) {
+			transmit_work();
+		}
+		cluster_work();
+	}
+	show_all();
+}
+
+
+sub get_ticks {
+	my $lowclock = 100_000_000;
+	my(@list, $tick,$radio);
+
+	# find the lowest clock
+	foreach $radio (values %Radios) {
+		$tick = $radio->{clock};
+		$lowclock = $tick if $lowclock > $tick;
+	}
+
+	$lowclock = 1 if $lowclock <= 0;
+
+	# handle timer has clicked over 1 second
+	$Tick += $lowclock;
+	if ($Tick >= 1000) {
+		$Tick -= 1000;
+		++$Clock;
+		display_time('~');
+		move_all();
+	}
+
+	foreach $radio (values %Radios) {
+		# record elapsed time
+		$radio->{timer} += $lowclock;
+	
+		# count down timer
+		if (($radio->{clock} -= $lowclock) <= 0) {
+
+			#time has gone off
+			push(@list, $radio);
+		}
+	}
+	return @list;
+}
+
+sub move_all {
+	my($i, $unit, $x, $y);
+
+	foreach $i (keys %Radios) {
+		$unit = $Radios{$i};
+
+		$x = $unit->{x} += $unit->{dx};
+		if ($x < 0 || $x > $Width) {
+			$unit->{dx} = -$unit->{dx};
+			$unit->{x} += $unit->{dx};
+		}
+
+		$y = $unit->{y} += $unit->{dy};
+		if ($y < 0 || $y > $Width) {
+			$unit->{dy} = -$unit->{dy};
+			$unit->{y} += $unit->{dy};
+		}
+	}
+}
+sub run_all {
+	$Running = 1;
+	$top->after(1, \&run_next);
+}
+
+sub run_next {
+	return unless $Running;
+
+	$top->after(1, \&run_next);
+	cluster_all();
+}
+
+sub stop_all {
+	$Running = 0;
+}
+
+
+sub show_all {
+	my($mac);
+
+	foreach $mac (keys %Radios) {
+		show_radio($Radios{$mac});
+	}
+	$top->update("idletasks");
+}
+
+sub restart {
+	my($i, $mac);
+
+	$Battlefield->delete('messages');
+
+	foreach $mac (sort keys %Radios) {
+		delete_radio($mac);
+	}
+
+	foreach $i (1..$Units) {
+		$mac = sprintf("XX:%02d:%02d", int($i/100), $i % 100);
+
+		$Radios{$mac} = Radio::new($mac, "u-$i", $Width);
+		$Arp{"u-$i"} = $mac;
+	}
+
+	dump_all("Simulation.start");
+	show_all();
+}
+
+sub load_all {
+	my($file) = @_;
+
+	my($mac, $radio, $key, $val);
+
+	open(F, "< $file") or main::abort("Can't load $file ($!)");
+
+	$radio = Radio::new($mac, "u-0", $Width);
+	while (<F>) {
+		chomp;
+
+		if (/^$/) {
+			$mac = $radio->{mac};
+			$Radios{$mac} = $radio;
+			$Arp{$radio->{name}} = $mac;
+
+			$radio = Radio::new($mac, "u-0", $Width);
+			next;
+		}
+
+		($key, $val) = split(' ', $_);
+		next if $val =~ /^\[/;	# ignore 
+		next if $val =~ /^\{/;	# ignore 
+
+		$radio->{$key} = $val;
+	}
+	close(F);
+	show_all();
+}
+
+
+sub dump_all {
+	my($file) = @_;
+	$file ||= "Simulation.dump";
+
+	my($mac, $radio, $key, $val);
+
+	open(F, "> $file");
+
+	foreach $mac (sort keys %Radios) {
+		$radio = $Radios{$mac};
+
+		foreach $key (sort keys %$radio) {
+			if (ref ($val = $radio->{$key})) {
+				$val = dump_ref($val);
+			}
+			print F "$key\t$val\n";
+		}
+
+		print F "\n";
+	}
+	close(F);
+}
+
+sub dump_ref {
+	my($ref) = @_;
+	my($val) = "$ref";
+	my($key);
+
+	if ($val =~ /^ARRAY/) {
+		$val = '[';
+		foreach $key (@$ref) {
+			$val .= " $key";
+		}
+		$val .= ' ]';
+
+	} elsif ($val =~ /^HASH/) {
+		$val = "{";
+		foreach $key (keys %$ref) {
+			 $val .= " $key => $ref->{$key} ";
+		}
+		$val .= " }";
+	}
+
+	return $val;
+}
+
+package Radio;
+
+sub transmit {
+	push(@Transmit, @_);
+}
+
+sub inrange {
+	my($radio, $other_mac) = @_;
+
+	main::abort("No such radio: $other_mac") 
+		unless defined $Radios{$other_mac};
+
+	return main::inrange($radio, $Radios{$other_mac});
+}
+
+package main;
+
+#============================================================================
+# Run simulation.
+#============================================================================
+
+if (@ARGV) {
+	$top->CmdLine;
+	print "ARGV now ",join(' ',@ARGV),"\n"
+}
+
+require "l2r.radio.pl";
+
+if (@ARGV) {
+	load_all($ARGV[0]);
+} else {
+	&restart;
+}
+
+
+
+Tk::MainLoop();

@@ -1,0 +1,12 @@
+service pcmcia start
+lsmod
+iwconfig 
+ifconfig eth3
+iwconfig eth3 
+iwconfig eth3 enc off
+iwconfig eth3 channel 3
+ifconfig eth3
+ifconfig eth3 10.10.10.1 netmask 255.255.255.0 broadcast 10.10.10.255
+ping -c 5 10.10.10.1
+ping -c 5 10.10.10.2
+ping -c 5 10.10.10.98

@@ -1,0 +1,232 @@
+arp	{ u-13 => XX:00:13  u-15 => XX:00:15  u-5 => XX:00:05  }
+bond	{ u-15 => u-13  }
+clock	290
+dx	-2
+dy	8
+mac	XX:00:01
+master	
+name	u-1
+nslaves	3
+slaves	{ u-13 => 10000  u-15 => 10000  u-5 => 10000  }
+status	M
+timer	710
+width	1000
+x	722
+y	876
+
+arp	{ u-6 => XX:00:06  u-8 => XX:00:08  }
+bond	{ }
+clock	380
+dx	6
+dy	2
+link	{ }
+mac	XX:00:02
+master	u-6
+name	u-2
+nslaves	0
+status	S
+timer	74853
+width	1000
+x	190
+y	866
+
+arp	{ u-4 => XX:00:04  u-12 => XX:00:12  }
+bond	{ }
+clock	159
+dx	-6
+dy	8
+link	{ }
+mac	XX:00:03
+master	u-12
+name	u-3
+nslaves	0
+status	B
+timer	3811
+width	1000
+x	592
+y	576
+
+arp	{ u-3 => XX:00:03  u-12 => XX:00:12  }
+bond	{ u-3 => u-12  }
+clock	1000
+dx	10
+dy	-8
+mac	XX:00:04
+master	
+name	u-4
+nslaves	1
+slaves	{ u-12 => 10000  }
+status	M
+timer	0
+width	1000
+x	763
+y	598
+
+arp	{ u-1 => XX:00:01  u-15 => XX:00:15  }
+bond	{ }
+clock	705
+dx	4
+dy	6
+link	{ }
+mac	XX:00:05
+master	u-1
+name	u-5
+nslaves	0
+status	S
+timer	5462
+width	1000
+x	666
+y	924
+
+arp	{ u-2 => XX:00:02  u-8 => XX:00:08  }
+clock	53
+dx	7
+dy	4
+mac	XX:00:06
+master	
+name	u-6
+nslaves	2
+slaves	{ u-2 => 10000  u-8 => 10000  }
+status	M
+timer	947
+width	1000
+x	90
+y	764
+
+arp	{ u-9 => XX:00:09  u-14 => XX:00:14  }
+clock	606
+dx	10
+dy	-1
+mac	XX:00:07
+master	
+name	u-7
+nslaves	2
+slaves	{ u-9 => 10000  u-14 => 10000  }
+status	M
+timer	394
+width	1000
+x	251
+y	423
+
+arp	{ u-2 => XX:00:02  u-6 => XX:00:06  }
+bond	{ }
+clock	20
+dx	-8
+dy	8
+link	{ }
+mac	XX:00:08
+master	u-6
+name	u-8
+nslaves	0
+status	S
+timer	16360
+width	1000
+x	89
+y	751
+
+arp	{ u-14 => XX:00:14  u-7 => XX:00:07  }
+bond	{ }
+clock	760
+dx	5
+dy	0
+link	{ }
+mac	XX:00:09
+master	u-7
+name	u-9
+nslaves	0
+status	S
+timer	103991
+width	1000
+x	282
+y	489
+
+clock	811
+dx	2
+dy	2
+mac	XX:00:10
+master	
+name	u-10
+nslaves	0
+status	F
+timer	20598
+width	1000
+x	664
+y	16
+
+clock	499
+dx	7
+dy	-3
+mac	XX:00:11
+master	
+name	u-11
+nslaves	1
+status	F
+timer	2889
+width	1000
+x	939
+y	251
+
+arp	{ u-3 => XX:00:03  u-4 => XX:00:04  }
+bond	{ }
+clock	866
+dx	1
+dy	6
+link	{ }
+mac	XX:00:12
+master	u-4
+name	u-12
+nslaves	0
+status	S
+timer	1999
+width	1000
+x	715
+y	390
+
+arp	{ u-1 => XX:00:01  u-15 => XX:00:15  }
+bond	{ }
+clock	378
+dx	5
+dy	-6
+link	{ }
+mac	XX:00:13
+master	u-1
+name	u-13
+nslaves	2
+status	S
+timer	3220
+width	1000
+x	928
+y	987
+
+arp	{ u-9 => XX:00:09  u-7 => XX:00:07  }
+bond	{ }
+clock	508
+dx	3
+dy	-7
+link	{ }
+mac	XX:00:14
+master	u-7
+name	u-14
+nslaves	1
+status	S
+timer	16757
+width	1000
+x	130
+y	434
+
+arp	{ u-1 => XX:00:01  u-13 => XX:00:13  u-5 => XX:00:05  }
+bond	{ }
+clock	991
+dx	-7
+dy	-5
+link	{ }
+mac	XX:00:15
+master	u-1
+name	u-15
+nslaves	0
+status	S
+timer	4358
+width	1000
+x	728
+y	991
+

@@ -1,0 +1,48 @@
+#!/usr/bin/perl
+
+use IO::Socket;
+
+$| = 1;
+
+$sock = new IO::Socket::INET(
+		PeerAddr => 'peach',
+		PeerPort => 1200,
+		Proto => 'tcp',
+	);
+
+die "Could not connect: $!" unless $sock;
+
+$SIG{'INT'} = \&report;
+$SIG{'QUIT'} = \&report_done;
+
+my($Start, $End, $Cnt);
+
+&generate_output;
+
+sub report_done {
+	report();
+	exit 0;
+}
+
+sub report {
+	my($dur) = $End - $Start;
+
+	printf "Sent %d kb over %d sec %6.2f kb/s\n", $Cnt, $dur, $Cnt/$dur;
+}
+
+sub generate_output {
+	my($data) = '*' x 1024;
+	my($now);
+
+	$End = $Start = time();
+	for (;;) {
+		syswrite($sock, $data);
+
+		++$Cnt;
+
+		if (($now=time()) != $End) {
+			$End = $now;
+			report;
+		}
+	}
+}

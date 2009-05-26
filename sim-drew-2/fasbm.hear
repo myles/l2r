@@ -1,0 +1,37 @@
+sub hear {
+	my($i, $n, $msg) = @_;
+	my($id);
+
+	# FASBM
+	$id = $i->{status} .  $n->{status};
+
+	set($i, $n, 'A', 'A') if $id eq 'FF';
+	set($i, $n, 'S', 'M') if $id eq 'FA';
+	set($i, $n, 'B', 'S') if $id eq 'FS';
+	set($i, $n, 'M', 'S') if $id eq 'FB';
+	set($i, $n, 'S', 'M') if $id eq 'FM';
+
+	set($i, $n, 'M', 'S') if $id eq 'AF';
+	set($i, $n, 'M', 'S') if $id eq 'AA';
+	set($i, $n, 'M', 'S') if $id eq 'AS';
+	set($i, $n, 'M', '.') if $id eq 'AB';
+	set($i, $n, 'B', '.') if $id eq 'AM';
+
+	set($i, $n, '.', 'A') if $id eq 'SF';
+	set($i, $n, '.', 'M') if $id eq 'SA';
+	set($i, $n, '.', '.') if $id eq 'SS';
+	set($i, $n, '.', '.') if $id eq 'SB';
+	set($i, $n, '.', '.') if $id eq 'SM';
+
+	set($i, $n, '.', 'M') if $id eq 'BF';
+	set($i, $n, '.', 'M') if $id eq 'BA';
+	set($i, $n, '.', '.') if $id eq 'BS';
+	set($i, $n, '.', '.') if $id eq 'BB';
+	set($i, $n, '.', '.') if $id eq 'BM';
+
+	set($i, $n, 'M', 'S') if $id eq 'MF';
+	set($i, $n, 'M', 'S') if $id eq 'MA';
+	set($i, $n, 'M', 'S') if $id eq 'MS';
+	set($i, $n, 'M', 'B') if $id eq 'MB';
+	set($i, $n, 'M', 'B') if $id eq 'MM';
+}

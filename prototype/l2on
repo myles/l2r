@@ -1,0 +1,7 @@
+#!/bin/sh
+
+machine="$1";
+shift;
+id=`date +%Y-%m-%d.%T.$$`
+
+./l2send on $machine $id "$@"

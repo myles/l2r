@@ -1,0 +1,22 @@
+
+TRW Project Plan
+
+Present State
+Conceptual -> prototype working, no optimizations.
+
+Project Initiations - (TRW awards contract)
+Task			Timelines		Deliverables
+rearchitecture		1 month			architecture documenats
+kernel development	3-6 months		kernel level version of the protocol
+							possibly integrated into the main branch of kernel.
+
+application		3-6 months		voice over IP, Video over IP
+development
+
+Integration		TRW's timeline	
+bug fixes and
+support
+
+deployment and		militaries timeline
+support	
+

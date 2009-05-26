@@ -1,0 +1,26 @@
+package L2R;
+
+my($Range_x) = 100_000;
+my($Range_y) = 100_000;
+
+sub new {
+	my($opt);
+	my($ref);
+	bless $ref;
+
+	&set_location($ref);
+
+	$ref = @_;
+	return $ref;
+}
+
+sub set_location {
+	$ref->x = rand($Range_x);
+	$ref->y = rand($Range_y);
+
+	print "$ref->name, $ref->x $ref->y\n";
+}
+
+sub plot {
+	
+

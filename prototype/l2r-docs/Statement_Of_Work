@@ -1,0 +1,23 @@
+
+Scope Of Work
+
+1) Research and Development for fully dynamic router
+
+- design of the routing algorithm, creation of routing RFC and
+creation of a reference sample.
+
+- enhancements for use in VoIP and VidIP, including QoS support.
+
+- enhancements for temporary virtual sessions.
+
+- 
+
+2) Linux Driver Development for unsupported hardware
+
+- development of linux device drivers for wireless cards
+
+3) On going maintenance of the router products.
+
+
+
+
