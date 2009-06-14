@@ -1,0 +1,87 @@
+
+Assumption
+
+Definition
+
+node - unit of communications. It can be a source a sink or a forwarder.
+
+DEFAULT - a route capable of routing all packets. It can be mobile or 
+stationary and only guarentees that a route exists to the outside
+world.
+
+CORE - these are routes known to exist but may or may not be reachable. All
+defaults are in the CORE. CORES typically have more than HAM connectivity.
+
+Tunnel - a route capable of sending to the dynamic network through a connection
+not part of the dynamic network. Example : routing through the internet to
+two parts of the dynamic network that can't speak to each other
+
+Gateway - a route capable of forwarding to another subnet/network.
+gate - a node marked as a potential gateway.
+
+
+Protocol
+++++++++
+
+Messages:
+ keep alive - sent once every x minutes. Rebroadcast by each node.
+ route find - multicast message to immediate neighbours to search for a
+route to an IP. If the route is in neighbours route table, send back route, 
+and send a forced KA to destination, to start a route discovery.
+Forced KA - a keep alive with no restrictions.
+
+Gateways -
+Given a local cluster, how does the nodes agree on a gateway?
+ - requirements:
+	node needs to be marked as gate
+	gates send own protocol (see below)
+	nodes must accept gate as a gateway.
+ 
+cluster collapse - a cluster is formed from independant nodes into a cluster
+with one gateway.
+	- gates communicate capablity and decide number of gateways needed.
+	- gates take job based on uptime. Longer uptime has higher priority.
+
+cluster merge - two cluster come to a close proximity that the gateways 
+decide to merge into one cluster.
+	- gates communicate capability and decide if merge is desirable.
+	- if merge is desirable gate with higher uptime becomes new gateway.
+	- message sent to 'losing' network to change gateway.
+
+cluster split - the cluster gets so big, or the cluster gets so dispersed that
+a descision is made to split the cluster and assign another gateway.
+	- overloaded gate sends 'help' msg.
+	- first gate to respond gets job immediate.
+	- all other responses are sent cancel request when they come.
+	- 'help' msg is not forwarded.
+
+cluster hopping - a single nodes moves from one gateway to another.
+
+
+Definition of the CORE
+- That part of the dynamic network that has access to to higher bandwidth 
+routes. example a route with a satellite uplink, or a T3 line. The route
+may or may not be dynamic.
+
+Preferences
+- always choose the main route in the routing table if it is there. (fastest).
+- if no route, but a gateway exists use that.
+- if no gateway, do a route find.
+
+
+Virtual Circuits
+- a capability of forming a closed reserved bandwidth route.
+VC have two types: Permenant, and Switched.
+Permanent - VC with one and only one route. If the route is removed for any 
+reason the VC is torn down.
+Switched - a VC with a single reserved route and alternate routes with a 
+'right' to the bandwidth. Bandwidth is not reserved, but traffic from a SwVC
+has preferential treatment if it shows up.
+
+
+
+
+
+
+
+

@@ -1,0 +1,13 @@
+
+
+L2R Protocol
+
+The L2R protocol is a method of transferring routing information dynamically through a reconfigurable network. The protocol assumes continuous changes in the information network cloud's physical location, and can handle splitting, tunnelling and merging information clouds spatially. The nodes using the protocol can dynamically join and leave a the network without warning, transfer between meshed networks and bridge meshed networks.L2R is designed to be immediately deployable in an arbitrary environment with complete independance on any existing infrastructure.
+
+The protocol was originally developed to aid digital communication over mobile ham wireless systems in an environement where the systems are moving relative to each other but the communication nodes stay within range of at least one other node. The node position is irrelevent as long as connectivity is made. The protocol is designed to optimize traffic flow but allow for higher level policy decisions. 
+
+L2R is designed to be a self anealling system. It depends on each nodes ability to find the information network cloud and to dynamically hook up to the rest of the network. The node will automatically integrate itself into the cloud creating and tearing down associations as necessary and defining its own existence in the network topology as needed..
+
+The protocol is presently in the prototype phase with a simple implementation of the basic routing communication without optimizations.
+
+
