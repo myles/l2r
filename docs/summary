@@ -1,0 +1,22 @@
+use constant EGON       => 'F';
+use constant VENKMANN   => 'S';
+use constant CLORTHO    => 'M';
+use constant ZULL       => 'B';
+use constant WEEKZULL   => 'W';
+
+
+A me-venkmann you-clortho			-- venkmann_acknowledge
+C me-clortho you-venkmann			-- clortho_reply
+E me-clortho timeout				-- egonize (free venkmann)
+G me-clortho uptime venkmann-number		-- clortho_greeting
+L me-clortho {venkmann list}			-- venkmann_list
+M me-clortho you-clortho 			-- merge_request
+O me-venkmann you-clortho			-- venkmann_pong
+P me-clortho you-venkmann {list of venkmann}	-- clortho_ping
+R me-zuul you-clortho				-- clortho_promotion
+S me-name					-- venkmann_request
+T me-clortho you-clortho1 you-clortho2 timeout	-- split_cluster
+W me-zuul you-clortho he-foreign-clortho	-- weak_zuul_announcement
+Z me-zuul you-clortho he-foreign-clortho	-- zuul_announcement
+
+
